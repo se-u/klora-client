@@ -27,7 +27,7 @@
     "react-scroll": "^1.9.0",
     "swiper": "^11.1.1",
     "tailwind-scrollbar-hide": "^1.1.7",
-    "ton": "^13.9.0",
+    "ton": "^6.13.1",
     "ton-core": "^0.53.0",
     "ton-crypto": "^3.2.0",
     "vite-plugin-node-polyfills": "^0.21.0"
