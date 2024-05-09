@@ -4,12 +4,6 @@ import TopBar from "../components/app/TopBar";
 import { useTonConnect } from "../hooks/useTonConnect";
 
 function AppLayout() {
-  const navigate = useNavigate();
-  const { connected } = useTonConnect();
-
-  if (!connected) {
-    return <>{navigate("/")}</>;
-  }
   return (
     <div className="bg-primary-900 w-screen h-screen font-dmsans">
       <div className="relative bg-white  max-w-sm mx-auto h-screen">
