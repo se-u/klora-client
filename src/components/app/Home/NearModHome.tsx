@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { LocationTick } from "iconsax-react";
+import {CloseCircle, LocationTick} from "iconsax-react";
 import { Link } from "react-router-dom";
 
 // Dummy data mod
@@ -24,13 +24,23 @@ const modData = [
 
 function NearModHome() {
     const [selectedMod, setSelectedMod] = useState(null);
+    const [notification, setNotification] = useState('');
 
     const handleModClick = (mod) => {
         setSelectedMod(mod);
     };
 
+
     const handleCloseDetail = () => {
         setSelectedMod(null);
+    };
+
+    const handleSend = () => {
+        setNotification('Berhasil Terkirim');
+        setTimeout(() => {
+            setNotification('');
+            setSelectedMod(null);
+        }, 3000);
     };
 
     return (
@@ -70,17 +80,43 @@ function NearModHome() {
                                 </Link>
                                 {/* DETAIL MOD */}
                                 {selectedMod && selectedMod.id === mod.id && (
-                                    <div className="mt-4 p-4 border border-neutral-200 rounded-lg">
+                                    <div className="mt-4 p-4 border border-neutral-200 space-y-2 rounded-lg">
                                         <div className="flex items-center justify-between mb-4">
                                             <h3 className="text-lg font-semibold">{selectedMod.name}</h3>
-                                            <button className="text-red-500" onClick={handleCloseDetail}>
-                                                Close
+                                            <CloseCircle onClick={handleCloseDetail} variant="Bulk"
+                                                         className="text-primary-600"/>
+                                        </div>
+                                        <img src={selectedMod.image} alt={selectedMod.name} className="w-full mb-4"/>
+                                        <p className="text-sm"><strong>Alamat: </strong> {selectedMod.address}</p>
+                                        <p className="text-sm"><strong>Nomer: </strong><Link to={`https://wa.me/${selectedMod.no_tlp}`}
+                                                                         className="text-blue-600 underline"
+                                                                         target="_blank"
+                                                                         rel="noopener noreferrer">{selectedMod.no_tlp}</Link>
+                                        </p>
+                                        <div className="flex flex-col space-y-2 ">
+                                            <div className="flex items-center  justify-between">
+                                                <label htmlFor="nick_name" className="font-bold text-sm mr-2">Nama
+                                                    panggilan:</label>
+                                                <input type="text" name="nick_name" id="nick_name"
+                                                       className="border rounded-md focus:outline-none focus:border-primary-500 p-1" placeholder="Panggilanmu"></input>
+                                            </div>
+                                            <div className="flex items-center justify-between">
+                                                <label htmlFor="jmlh_btl" className="font-bold text-sm mr-2">Jumlah
+                                                    Botol:</label>
+                                                <input type="number" name="jmlh_btl" id="jmlh_btl"
+                                                       className="border rounded-md  focus:outline-none p-1 focus:border-primary-500" placeholder="Jumlah Botol"></input>
+                                            </div>
+                                        </div>
+                                        {notification && (
+                                            <div className="bg-green-200 text-green-800 p-2 rounded-md mt-2">
+                                                {notification}
+                                            </div>
+                                        )}
+                                        <div className="flex justify-center ">
+                                            <button onClick={handleSend}
+                                                className="mt-2 bg-primary-700 px-16 py-1 hover:bg-primary-600  rounded-md text-white">Kirim
                                             </button>
                                         </div>
-                                        <img src={selectedMod.image} alt={selectedMod.name} className="w-full mb-4" />
-                                        <p><strong>Alamat: </strong> {selectedMod.address}</p>
-                                        <p><strong>Nomer: </strong><Link to={`https://wa.me/${selectedMod.no_tlp}`} className="text-blue-600 underline" target="_blank" rel="noopener noreferrer">{selectedMod.no_tlp}</Link></p>
-                                        <Link to={selectedMod.mapLink} target="_blank" rel="noopener noreferrer" className="block mt-4 bg-primary-700 hover:bg-primary-600 py-1 rounded-md text-white text-center">Kesana Sekarang</Link>
                                     </div>
                                 )}
                             </li>

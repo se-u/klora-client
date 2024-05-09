@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import {Eye} from "iconsax-react";
 
 // Contoh data pengguna
 const userData = {
@@ -14,6 +15,7 @@ export default function Volunteer() {
     const [showDetail, setShowDetail] = useState(false); // State untuk menampilkan detail pengguna
     const [isVerified, setIsVerified] = useState(user.isVerified);
     const [verifiedNotification, setVerifiedNotification] = useState('');
+    const [cancelNotification, setCancelNotification] = useState('');
 
     const handleShowDetail = () => {
         setShowDetail(!showDetail);
@@ -24,6 +26,14 @@ export default function Volunteer() {
         setVerifiedNotification('Botol tervertifikasi.');
         // Update data pengguna jika perlu
         setUser(prevUser => ({ ...prevUser, isVerified: true }));
+    };
+
+
+    const handleCancel = () => {
+        setCancelNotification('Berhasil Cancel.');
+        // Reset status verifikasi dan notifikasi setelah Cancel
+        setIsVerified(false);
+        setVerifiedNotification('');
     };
 
     return (
@@ -45,7 +55,7 @@ export default function Volunteer() {
             >
                 <div className="flex justify-between  mb-2">
                     <span className="font-medium text-neutral-700">{user.name}</span>
-                    <span className="font-medium bg-primary-600 text-white py-1 px-3 rounded-md">Detail</span>
+                    <Eye variant="Bulk" className="text-primary-600"/>
                 </div>
             </div>
 
@@ -70,18 +80,29 @@ export default function Volunteer() {
                         />
                     </div>
                     <div className="mb-2">
-                        {!isVerified && (
-                            <button className="ml-4 font-medium bg-primary-600 hover:bg-primary-700 text-white px-6 py-1 rounded-md"
-                                    onClick={handleVerify}
-                            >
-                                Verify
-                            </button>
+                        {!isVerified ? (
+                            <div className="flex">
+                                <button className="font-medium bg-primary-700 hover:bg-primary-600 text-white px-6 py-1 rounded-md mr-2"
+                                        onClick={handleVerify}
+                                >
+                                    Verify
+                                </button>
+                                <button className="font-medium bg-red-700 hover:bg-red-600 text-white px-6 py-1 rounded-md"
+                                        onClick={handleCancel}
+                                >
+                                    Cancel
+                                </button>
+                            </div>
+                        ) : (
+                            <div className="mt-4 bg-primary-500 text-white p-2 rounded-md">
+                                {verifiedNotification}
+                            </div>
                         )}
                     </div>
                     {/* Notifikasi Vertifikasi */}
-                    {verifiedNotification && (
-                        <div className="mt-4 bg-primary-500 text-white p-2 rounded-md">
-                            {verifiedNotification}
+                    {cancelNotification && (
+                        <div className="mt-4 bg-red-500 text-white p-2 rounded-md">
+                            {cancelNotification}
                         </div>
                     )}
                 </div>
