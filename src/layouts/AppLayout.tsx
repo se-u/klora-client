@@ -7,7 +7,7 @@ function AppLayout() {
   const navigate = useNavigate();
   const { connected } = useTonConnect();
 
-  if (connected) {
+  if (!connected) {
     return <>{navigate("/")}</>;
   }
   return (
