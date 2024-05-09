@@ -1,3 +1,5 @@
+import AppButton from "../../components/app/AppButton";
+
 const MyProfile = () => {
     return (
         <div className="grid gap-10">
@@ -74,14 +76,13 @@ const MyProfile = () => {
                 </div>
                 {/* END NFT yang dimiliki */}
             </div>
-            <button
-                className="w-full py-2 px-4 bg-primary-700 text-white rounded-md hover:bg-primary-600 transition duration-300"
+
+            <AppButton
                 onClick={() => {
                     // Logika untuk logout
                 }}
-            >
-                Logout
-            </button>
+                text="Logout"
+            />
         </div>
     );
 };

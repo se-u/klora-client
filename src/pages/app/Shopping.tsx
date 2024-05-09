@@ -1,6 +1,7 @@
 import { useState } from "react";
-import {Link} from "react-router-dom";
-import {ArrowUp, BuyCrypto,  CloseCircle} from "iconsax-react";
+import { Link } from "react-router-dom";
+import { ArrowUp, BuyCrypto, CloseCircle } from "iconsax-react";
+import AppButton from "../../components/app/AppButton";
 
 function Shopping() {
     const [sortBy, setSortBy] = useState("default");
@@ -25,7 +26,6 @@ function Shopping() {
         setSelectedProduct(null);
         setPurchaseSuccess(false); // Reset purchase success message
     };
-
 
     const handlePurchase = () => {
         // Perform purchase logic here
@@ -154,7 +154,6 @@ function Shopping() {
                                     to="#"
                                     className="group block overflow-hidden"
                                     onClick={() => handleShowDetails(produknya)}
-
                                 >
                                     <img
                                         src={produknya.productImages}
@@ -189,45 +188,59 @@ function Shopping() {
                 <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50">
                     <div className="bg-white p-4 border border-gray-300 rounded-md max-w-sm">
                         <button onClick={handleCloseDetails}>
-                            <CloseCircle variant="Bulk" className="text-primary-600"/>
+                            <CloseCircle
+                                variant="Bulk"
+                                className="text-primary-600"
+                            />
                         </button>
                         <div className=" flex flex-col justify-center items-center text-center">
-                            <h4 className="text-md font-bold">{selectedProduct.productName}</h4>
-                            <img src={selectedProduct.productImages} className="size-40 mt-2" alt="NFT"/>
+                            <h4 className="text-md font-bold">
+                                {selectedProduct.productName}
+                            </h4>
+                            <img
+                                src={selectedProduct.productImages}
+                                className="size-40 mt-2"
+                                alt="NFT"
+                            />
                         </div>
                         <div className="mx-8 my-2">
                             <div className="mt-2 font-medium">
                                 <div className="flex justify-between">
                                     <p>Level : {selectedProduct.level}</p>
-                                    <p>Harga : {selectedProduct.hargaToken} KLO</p>
+                                    <p>
+                                        Harga : {selectedProduct.hargaToken} KLO
+                                    </p>
                                 </div>
                                 <div className="mt-2">
                                     <p className="font-bold">Penambahan</p>
-                                    <p className="flex items-center gap-2">Botol/Minggu : +20
-                                        <ArrowUp className="w-4 h-4 text-primary-600" variant="Bulk"/>
+                                    <p className="flex items-center gap-2">
+                                        Botol/Minggu : +20
+                                        <ArrowUp
+                                            className="w-4 h-4 text-primary-600"
+                                            variant="Bulk"
+                                        />
                                     </p>
                                     <p className="flex items-center gap-2">
                                         Swap Currency : + 0.001 KLO
-                                        <ArrowUp className="w-4 h-4 text-primary-600" variant="Bulk"/>
+                                        <ArrowUp
+                                            className="w-4 h-4 text-primary-600"
+                                            variant="Bulk"
+                                        />
                                     </p>
                                 </div>
                             </div>
                         </div>
                         <div className="text-center">
                             {isOwned ? (
-                                <button
-                                    className="mt-4 bg-primary-700 text-white px-16 py-1 rounded-md disabled:opacity-50"
-                                    disabled
-                                >
-                                    Sudah Dimiliki
-                                </button>
+                                <AppButton
+                                    text="Sudah Dimiliki"
+                                    onClick={undefined}
+                                />
                             ) : (
-                                <button
+                                <AppButton
                                     onClick={handlePurchase}
-                                    className="mt-4 bg-primary-700 hover:bg-primary-600 text-white px-16 py-1 rounded-md"
-                                >
-                                    Beli
-                                </button>
+                                    text="Beli"
+                                />
                             )}
                         </div>
                     </div>
@@ -237,10 +250,12 @@ function Shopping() {
             {/* Purchase success popup */}
             {purchaseSuccess && (
                 <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50">
-                    <div
-                        className="bg-white p-4 border border-gray-300 rounded-md max-w-sm flex flex-col text-center items-center">
-                        <BuyCrypto className="text-green-500 w-12 h-12 mb-2"/>
-                        <p className="text-lg font-bold">Pembelian <br/> {selectedProduct.productName} <br/> Sukses!</p>
+                    <div className="bg-white p-4 border border-gray-300 rounded-md max-w-sm flex flex-col text-center items-center">
+                        <BuyCrypto className="text-green-500 w-12 h-12 mb-2" />
+                        <p className="text-lg font-bold">
+                            Pembelian <br /> {selectedProduct.productName}{" "}
+                            <br /> Sukses!
+                        </p>
                     </div>
                 </div>
             )}

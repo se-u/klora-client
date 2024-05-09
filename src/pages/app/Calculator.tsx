@@ -1,7 +1,8 @@
-import { useState } from 'react';
+import { useState } from "react";
+import AppButton from "../../components/app/AppButton";
 
 const Calculator = () => {
-    const [bottleSizes, setBottleSizes] = useState(['', '', '']);
+    const [bottleSizes, setBottleSizes] = useState(["", "", ""]);
     const [weeks, setWeeks] = useState([0, 0, 0]);
     const [carbonEmissions, setCarbonEmissions] = useState(0);
     const [totalBottles, setTotalBottles] = useState(0);
@@ -10,9 +11,9 @@ const Calculator = () => {
 
     const handleCalculate = () => {
         const carbonFactors = {
-            '330ml': 0.2,
-            '660ml': 0.3,
-            '1500ml': 0.5,
+            "330ml": 0.2,
+            "660ml": 0.3,
+            "1500ml": 0.5,
         };
 
         let totalCarbon = 0;
@@ -30,12 +31,24 @@ const Calculator = () => {
 
     return (
         <div className="max-w-md mx-auto p-6 bg-white">
-            <h1 className="text-xl font-bold text-center mb-6">Estimasi Karbon dari Botol Plastik</h1>
+            <h1 className="text-xl font-bold text-center mb-6">
+                Estimasi Karbon dari Botol Plastik
+            </h1>
             {bottleSizes.map((size, index) => (
                 <div key={index} className="mb-1">
                     <div className="flex justify-between">
-                        <label htmlFor={`bottleSize${index}`} className="block text-sm font-semibold mb-1">Ukuran Botol {index + 1}</label>
-                        <label htmlFor={`consumption${index}`} className="block text-sm font-semibold mb-1">Konsumsi / Minggu</label>
+                        <label
+                            htmlFor={`bottleSize${index}`}
+                            className="block text-sm font-semibold mb-1"
+                        >
+                            Ukuran Botol {index + 1}
+                        </label>
+                        <label
+                            htmlFor={`consumption${index}`}
+                            className="block text-sm font-semibold mb-1"
+                        >
+                            Konsumsi / Minggu
+                        </label>
                     </div>
                     <div className="flex items-center">
                         <select
@@ -68,16 +81,13 @@ const Calculator = () => {
                     </div>
                 </div>
             ))}
-            <button
-                className="w-full py-2 px-4 mt-4 bg-primary-700 text-white rounded-md hover:bg-primary-600 transition duration-300"
-                onClick={handleCalculate}
-            >
-                Hitung Sekarang
-            </button>
+            <AppButton onClick={handleCalculate} text="Hitung Sekarang" />
             {carbonEmissions > 0 && (
                 <div className="mt-4 grid grid-cols-2 gap-4">
                     <div className="p-4 bg-gray-100 rounded-md">
-                        <h2 className="font-semibold">Karbon yang Dihasilkan</h2>
+                        <h2 className="font-semibold">
+                            Karbon yang Dihasilkan
+                        </h2>
                         <p className="text-lg">{carbonEmissions} kgCO2</p>
                     </div>
                     <div className="p-4 bg-gray-100 rounded-md">
