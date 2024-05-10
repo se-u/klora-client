@@ -51,34 +51,34 @@ function DisplayTasHome() {
       jmlBotol: Number(myBottle),
       maxBotol: 15,
     },
-    // {
-    //     id: 2,
-    //     level: "Level 2",
-    //     slideImages: "https://swiperjs.com/demos/images/nature-2.jpg",
-    //     jmlBotol: 5,
-    //     maxBotol: 15,
-    // },
-    // {
-    //     id: 3,
-    //     level: "Level 3",
-    //     slideImages: "https://swiperjs.com/demos/images/nature-3.jpg",
-    //     jmlBotol: 5,
-    //     maxBotol: 20,
-    // },
-    // {
-    //     id: 4,
-    //     level: "Level 4",
-    //     slideImages: "https://swiperjs.com/demos/images/nature-4.jpg",
-    //     jmlBotol: 20,
-    //     maxBotol: 25,
-    // },
-    // {
-    //     id: 5,
-    //     level: "Level 5",
-    //     slideImages: "https://swiperjs.com/demos/images/nature-5.jpg",
-    //     jmlBotol: 0,
-    //     maxBotol: 30,
-    // },
+    {
+        id: 2,
+        level: "Level 2",
+        slideImages: "https://swiperjs.com/demos/images/nature-2.jpg",
+        jmlBotol: 5,
+        maxBotol: 15,
+    },
+    {
+        id: 3,
+        level: "Level 3",
+        slideImages: "https://swiperjs.com/demos/images/nature-3.jpg",
+        jmlBotol: 5,
+        maxBotol: 20,
+    },
+    {
+        id: 4,
+        level: "Level 4",
+        slideImages: "https://swiperjs.com/demos/images/nature-4.jpg",
+        jmlBotol: 20,
+        maxBotol: 25,
+    },
+    {
+        id: 5,
+        level: "Level 5",
+        slideImages: "https://swiperjs.com/demos/images/nature-5.jpg",
+        jmlBotol: 0,
+        maxBotol: 30,
+    },
   ];
 
   slideImages.forEach((item) => {
@@ -86,7 +86,7 @@ function DisplayTasHome() {
   });
 
   return (
-    <div>
+    <div className="rounded-lg border-t-2 border-l-2 border-r-[5.2px] pr-2 border-b-[3px] border-border">
       <Swiper
         effect={"flip"}
         pagination={true}
@@ -94,21 +94,21 @@ function DisplayTasHome() {
         className="mySwiper max-w-xs br"
       >
         {slideImages.map((keranjang) => (
-          <SwiperSlide key={keranjang.id} className="grid gap-3 relative">
-            <div className="flex absolute z-50 px-3 w-full my-3 justify-between ">
-              <div className="grid px-5 py-1.5 bg-neutral-50 rounded-full border border-neutral-400 w-fit items-center">
+          <SwiperSlide key={keranjang.id} className="grid gap-2 mb-2 relative">
+            <div className="flex absolute z-50 px-3 w-full my-4  justify-between ">
+              <div className="grid px-4 py-1 bg-neutral-50 rounded-full border  border-t-2 border-l-2 border-r-[5px] border-b-[3px] border-border w-fit items-center">
                 <p className="text-sm">{keranjang.level}</p>
               </div>
               <div>
-                <AddCircle className="w-8 h-8 text-neutral-100" />
+                <AddCircle className="w-8 h-8 text-border" />
               </div>
             </div>
             <img
               src={keranjang.slideImages}
               alt="Gambar"
-              className="rounded-3xl"
+              className="rounded-3xl mt-5"
             />
-            <div className="flex">
+            <div className="flex p-2">
               {/* icon botol */}
               <Milk variant="Bulk" className="text-primary-600 w-16 h-16" />
               {/* end icon botol */}
