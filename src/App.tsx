@@ -9,6 +9,7 @@ import MyProfile from "./pages/app/MyProfile";
 import { FourOhFourOhFour } from "./components/landingpage/index";
 import Volunteer from "./components/app/Volunteer/Volunteer";
 import AppLayout from "./layouts/AppLayout";
+import ModeratUi from "./components/app/Volunteer/Moderat.tsx";
 
 export default function App() {
   const router = createBrowserRouter([
@@ -37,7 +38,7 @@ export default function App() {
         },
         {
           path: "/app/volunteer",
-          element: <Volunteer />,
+          element: <ModeratUi />,
         },
         {
           path: "/app/calculator",
