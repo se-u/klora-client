@@ -3,7 +3,7 @@
 import { useEffect, useState } from "react";
 import { Address, JettonMaster, JettonWallet } from "@ton/ton";
 import config from "../../../config";
-import { TonConnectButton, useTonAddress } from "@tonconnect/ui-react";
+import { useTonAddress } from "@tonconnect/ui-react";
 import { useTonClient } from "../../hooks/useTonClient";
 
 function TopBar() {
