@@ -540,40 +540,35 @@ function dictValueParserArgSendBottle(): DictionaryValue<ArgSendBottle> {
 export type ArgVerifyBottle = {
     $$type: 'ArgVerifyBottle';
     address: Address;
-    masterAddress: Address;
     amount: bigint;
 }
 
 export function storeArgVerifyBottle(src: ArgVerifyBottle) {
     return (builder: Builder) => {
         let b_0 = builder;
-        b_0.storeUint(2964497605, 32);
+        b_0.storeUint(1650289486, 32);
         b_0.storeAddress(src.address);
-        b_0.storeAddress(src.masterAddress);
         b_0.storeInt(src.amount, 257);
     };
 }
 
 export function loadArgVerifyBottle(slice: Slice) {
     let sc_0 = slice;
-    if (sc_0.loadUint(32) !== 2964497605) { throw Error('Invalid prefix'); }
+    if (sc_0.loadUint(32) !== 1650289486) { throw Error('Invalid prefix'); }
     let _address = sc_0.loadAddress();
-    let _masterAddress = sc_0.loadAddress();
     let _amount = sc_0.loadIntBig(257);
-    return { $$type: 'ArgVerifyBottle' as const, address: _address, masterAddress: _masterAddress, amount: _amount };
+    return { $$type: 'ArgVerifyBottle' as const, address: _address, amount: _amount };
 }
 
 function loadTupleArgVerifyBottle(source: TupleReader) {
     let _address = source.readAddress();
-    let _masterAddress = source.readAddress();
     let _amount = source.readBigNumber();
-    return { $$type: 'ArgVerifyBottle' as const, address: _address, masterAddress: _masterAddress, amount: _amount };
+    return { $$type: 'ArgVerifyBottle' as const, address: _address, amount: _amount };
 }
 
 function storeTupleArgVerifyBottle(source: ArgVerifyBottle) {
     let builder = new TupleBuilder();
     builder.writeAddress(source.address);
-    builder.writeAddress(source.masterAddress);
     builder.writeNumber(source.amount);
     return builder.build();
 }
@@ -589,140 +584,52 @@ function dictValueParserArgVerifyBottle(): DictionaryValue<ArgVerifyBottle> {
     }
 }
 
-export type BagItem = {
-    $$type: 'BagItem';
-    id: bigint;
-    level: bigint;
-    name: string;
-    image_url: string;
-    max: bigint;
-    price: bigint;
+export type Item = {
+    $$type: 'Item';
+    name: string | null;
+    max: bigint | null;
+    total: bigint | null;
 }
 
-export function storeBagItem(src: BagItem) {
+export function storeItem(src: Item) {
     return (builder: Builder) => {
         let b_0 = builder;
-        b_0.storeUint(src.id, 256);
-        b_0.storeUint(src.level, 256);
-        b_0.storeStringRefTail(src.name);
-        b_0.storeStringRefTail(src.image_url);
-        b_0.storeUint(src.max, 256);
-        let b_1 = new Builder();
-        b_1.storeUint(src.price, 256);
-        b_0.storeRef(b_1.endCell());
+        if (src.name !== null && src.name !== undefined) { b_0.storeBit(true).storeStringRefTail(src.name); } else { b_0.storeBit(false); }
+        if (src.max !== null && src.max !== undefined) { b_0.storeBit(true).storeUint(src.max, 256); } else { b_0.storeBit(false); }
+        if (src.total !== null && src.total !== undefined) { b_0.storeBit(true).storeUint(src.total, 256); } else { b_0.storeBit(false); }
     };
 }
 
-export function loadBagItem(slice: Slice) {
+export function loadItem(slice: Slice) {
     let sc_0 = slice;
-    let _id = sc_0.loadUintBig(256);
-    let _level = sc_0.loadUintBig(256);
-    let _name = sc_0.loadStringRefTail();
-    let _image_url = sc_0.loadStringRefTail();
-    let _max = sc_0.loadUintBig(256);
-    let sc_1 = sc_0.loadRef().beginParse();
-    let _price = sc_1.loadUintBig(256);
-    return { $$type: 'BagItem' as const, id: _id, level: _level, name: _name, image_url: _image_url, max: _max, price: _price };
+    let _name = sc_0.loadBit() ? sc_0.loadStringRefTail() : null;
+    let _max = sc_0.loadBit() ? sc_0.loadUintBig(256) : null;
+    let _total = sc_0.loadBit() ? sc_0.loadUintBig(256) : null;
+    return { $$type: 'Item' as const, name: _name, max: _max, total: _total };
 }
 
-function loadTupleBagItem(source: TupleReader) {
-    let _id = source.readBigNumber();
-    let _level = source.readBigNumber();
-    let _name = source.readString();
-    let _image_url = source.readString();
-    let _max = source.readBigNumber();
-    let _price = source.readBigNumber();
-    return { $$type: 'BagItem' as const, id: _id, level: _level, name: _name, image_url: _image_url, max: _max, price: _price };
+function loadTupleItem(source: TupleReader) {
+    let _name = source.readStringOpt();
+    let _max = source.readBigNumberOpt();
+    let _total = source.readBigNumberOpt();
+    return { $$type: 'Item' as const, name: _name, max: _max, total: _total };
 }
 
-function storeTupleBagItem(source: BagItem) {
+function storeTupleItem(source: Item) {
     let builder = new TupleBuilder();
-    builder.writeNumber(source.id);
-    builder.writeNumber(source.level);
     builder.writeString(source.name);
-    builder.writeString(source.image_url);
     builder.writeNumber(source.max);
-    builder.writeNumber(source.price);
+    builder.writeNumber(source.total);
     return builder.build();
 }
 
-function dictValueParserBagItem(): DictionaryValue<BagItem> {
+function dictValueParserItem(): DictionaryValue<Item> {
     return {
         serialize: (src, buidler) => {
-            buidler.storeRef(beginCell().store(storeBagItem(src)).endCell());
+            buidler.storeRef(beginCell().store(storeItem(src)).endCell());
         },
         parse: (src) => {
-            return loadBagItem(src.loadRef().beginParse());
-        }
-    }
-}
-
-export type ArgBagItem = {
-    $$type: 'ArgBagItem';
-    id: bigint;
-    level: bigint;
-    name: string;
-    image_url: string;
-    max: bigint;
-    price: bigint;
-}
-
-export function storeArgBagItem(src: ArgBagItem) {
-    return (builder: Builder) => {
-        let b_0 = builder;
-        b_0.storeUint(1606671232, 32);
-        b_0.storeUint(src.id, 256);
-        b_0.storeUint(src.level, 256);
-        b_0.storeStringRefTail(src.name);
-        b_0.storeStringRefTail(src.image_url);
-        b_0.storeUint(src.max, 256);
-        let b_1 = new Builder();
-        b_1.storeUint(src.price, 256);
-        b_0.storeRef(b_1.endCell());
-    };
-}
-
-export function loadArgBagItem(slice: Slice) {
-    let sc_0 = slice;
-    if (sc_0.loadUint(32) !== 1606671232) { throw Error('Invalid prefix'); }
-    let _id = sc_0.loadUintBig(256);
-    let _level = sc_0.loadUintBig(256);
-    let _name = sc_0.loadStringRefTail();
-    let _image_url = sc_0.loadStringRefTail();
-    let _max = sc_0.loadUintBig(256);
-    let sc_1 = sc_0.loadRef().beginParse();
-    let _price = sc_1.loadUintBig(256);
-    return { $$type: 'ArgBagItem' as const, id: _id, level: _level, name: _name, image_url: _image_url, max: _max, price: _price };
-}
-
-function loadTupleArgBagItem(source: TupleReader) {
-    let _id = source.readBigNumber();
-    let _level = source.readBigNumber();
-    let _name = source.readString();
-    let _image_url = source.readString();
-    let _max = source.readBigNumber();
-    let _price = source.readBigNumber();
-    return { $$type: 'ArgBagItem' as const, id: _id, level: _level, name: _name, image_url: _image_url, max: _max, price: _price };
-}
-
-function storeTupleArgBagItem(source: ArgBagItem) {
-    let builder = new TupleBuilder();
-    builder.writeNumber(source.id);
-    builder.writeNumber(source.level);
-    builder.writeString(source.name);
-    builder.writeString(source.image_url);
-    builder.writeNumber(source.max);
-    builder.writeNumber(source.price);
-    return builder.build();
-}
-
-function dictValueParserArgBagItem(): DictionaryValue<ArgBagItem> {
-    return {
-        serialize: (src, buidler) => {
-            buidler.storeRef(beginCell().store(storeArgBagItem(src)).endCell());
-        },
-        parse: (src) => {
-            return loadArgBagItem(src.loadRef().beginParse());
+            return loadItem(src.loadRef().beginParse());
         }
     }
 }
@@ -732,6 +639,7 @@ export type Master = {
     name: string;
     camp: string;
     phone: bigint;
+    totalBottle: bigint;
     status: boolean;
 }
 
@@ -741,6 +649,7 @@ export function storeMaster(src: Master) {
         b_0.storeStringRefTail(src.name);
         b_0.storeStringRefTail(src.camp);
         b_0.storeUint(src.phone, 256);
+        b_0.storeUint(src.totalBottle, 256);
         b_0.storeBit(src.status);
     };
 }
@@ -750,16 +659,18 @@ export function loadMaster(slice: Slice) {
     let _name = sc_0.loadStringRefTail();
     let _camp = sc_0.loadStringRefTail();
     let _phone = sc_0.loadUintBig(256);
+    let _totalBottle = sc_0.loadUintBig(256);
     let _status = sc_0.loadBit();
-    return { $$type: 'Master' as const, name: _name, camp: _camp, phone: _phone, status: _status };
+    return { $$type: 'Master' as const, name: _name, camp: _camp, phone: _phone, totalBottle: _totalBottle, status: _status };
 }
 
 function loadTupleMaster(source: TupleReader) {
     let _name = source.readString();
     let _camp = source.readString();
     let _phone = source.readBigNumber();
+    let _totalBottle = source.readBigNumber();
     let _status = source.readBoolean();
-    return { $$type: 'Master' as const, name: _name, camp: _camp, phone: _phone, status: _status };
+    return { $$type: 'Master' as const, name: _name, camp: _camp, phone: _phone, totalBottle: _totalBottle, status: _status };
 }
 
 function storeTupleMaster(source: Master) {
@@ -767,6 +678,7 @@ function storeTupleMaster(source: Master) {
     builder.writeString(source.name);
     builder.writeString(source.camp);
     builder.writeNumber(source.phone);
+    builder.writeNumber(source.totalBottle);
     builder.writeBoolean(source.status);
     return builder.build();
 }
@@ -788,30 +700,33 @@ export type ArgAddMaster = {
     name: string;
     camp: string;
     phone: bigint;
+    totalBottle: bigint;
     status: boolean;
 }
 
 export function storeArgAddMaster(src: ArgAddMaster) {
     return (builder: Builder) => {
         let b_0 = builder;
-        b_0.storeUint(7850487, 32);
+        b_0.storeUint(226298563, 32);
         b_0.storeAddress(src.master);
         b_0.storeStringRefTail(src.name);
         b_0.storeStringRefTail(src.camp);
         b_0.storeUint(src.phone, 256);
+        b_0.storeUint(src.totalBottle, 256);
         b_0.storeBit(src.status);
     };
 }
 
 export function loadArgAddMaster(slice: Slice) {
     let sc_0 = slice;
-    if (sc_0.loadUint(32) !== 7850487) { throw Error('Invalid prefix'); }
+    if (sc_0.loadUint(32) !== 226298563) { throw Error('Invalid prefix'); }
     let _master = sc_0.loadAddress();
     let _name = sc_0.loadStringRefTail();
     let _camp = sc_0.loadStringRefTail();
     let _phone = sc_0.loadUintBig(256);
+    let _totalBottle = sc_0.loadUintBig(256);
     let _status = sc_0.loadBit();
-    return { $$type: 'ArgAddMaster' as const, master: _master, name: _name, camp: _camp, phone: _phone, status: _status };
+    return { $$type: 'ArgAddMaster' as const, master: _master, name: _name, camp: _camp, phone: _phone, totalBottle: _totalBottle, status: _status };
 }
 
 function loadTupleArgAddMaster(source: TupleReader) {
@@ -819,8 +734,9 @@ function loadTupleArgAddMaster(source: TupleReader) {
     let _name = source.readString();
     let _camp = source.readString();
     let _phone = source.readBigNumber();
+    let _totalBottle = source.readBigNumber();
     let _status = source.readBoolean();
-    return { $$type: 'ArgAddMaster' as const, master: _master, name: _name, camp: _camp, phone: _phone, status: _status };
+    return { $$type: 'ArgAddMaster' as const, master: _master, name: _name, camp: _camp, phone: _phone, totalBottle: _totalBottle, status: _status };
 }
 
 function storeTupleArgAddMaster(source: ArgAddMaster) {
@@ -829,6 +745,7 @@ function storeTupleArgAddMaster(source: ArgAddMaster) {
     builder.writeString(source.name);
     builder.writeString(source.camp);
     builder.writeNumber(source.phone);
+    builder.writeNumber(source.totalBottle);
     builder.writeBoolean(source.status);
     return builder.build();
 }
@@ -840,46 +757,6 @@ function dictValueParserArgAddMaster(): DictionaryValue<ArgAddMaster> {
         },
         parse: (src) => {
             return loadArgAddMaster(src.loadRef().beginParse());
-        }
-    }
-}
-
-export type Bags = {
-    $$type: 'Bags';
-    bags: string;
-}
-
-export function storeBags(src: Bags) {
-    return (builder: Builder) => {
-        let b_0 = builder;
-        b_0.storeStringRefTail(src.bags);
-    };
-}
-
-export function loadBags(slice: Slice) {
-    let sc_0 = slice;
-    let _bags = sc_0.loadStringRefTail();
-    return { $$type: 'Bags' as const, bags: _bags };
-}
-
-function loadTupleBags(source: TupleReader) {
-    let _bags = source.readString();
-    return { $$type: 'Bags' as const, bags: _bags };
-}
-
-function storeTupleBags(source: Bags) {
-    let builder = new TupleBuilder();
-    builder.writeString(source.bags);
-    return builder.build();
-}
-
-function dictValueParserBags(): DictionaryValue<Bags> {
-    return {
-        serialize: (src, buidler) => {
-            buidler.storeRef(beginCell().store(storeBags(src)).endCell());
-        },
-        parse: (src) => {
-            return loadBags(src.loadRef().beginParse());
         }
     }
 }
@@ -973,70 +850,25 @@ function dictValueParserArgClearSendBottle(): DictionaryValue<ArgClearSendBottle
     }
 }
 
-export type ArgAddUserBag = {
-    $$type: 'ArgAddUserBag';
-    address: Address;
-    bags: string;
-}
-
-export function storeArgAddUserBag(src: ArgAddUserBag) {
-    return (builder: Builder) => {
-        let b_0 = builder;
-        b_0.storeUint(891968436, 32);
-        b_0.storeAddress(src.address);
-        b_0.storeStringRefTail(src.bags);
-    };
-}
-
-export function loadArgAddUserBag(slice: Slice) {
-    let sc_0 = slice;
-    if (sc_0.loadUint(32) !== 891968436) { throw Error('Invalid prefix'); }
-    let _address = sc_0.loadAddress();
-    let _bags = sc_0.loadStringRefTail();
-    return { $$type: 'ArgAddUserBag' as const, address: _address, bags: _bags };
-}
-
-function loadTupleArgAddUserBag(source: TupleReader) {
-    let _address = source.readAddress();
-    let _bags = source.readString();
-    return { $$type: 'ArgAddUserBag' as const, address: _address, bags: _bags };
-}
-
-function storeTupleArgAddUserBag(source: ArgAddUserBag) {
-    let builder = new TupleBuilder();
-    builder.writeAddress(source.address);
-    builder.writeString(source.bags);
-    return builder.build();
-}
-
-function dictValueParserArgAddUserBag(): DictionaryValue<ArgAddUserBag> {
-    return {
-        serialize: (src, buidler) => {
-            buidler.storeRef(beginCell().store(storeArgAddUserBag(src)).endCell());
-        },
-        parse: (src) => {
-            return loadArgAddUserBag(src.loadRef().beginParse());
-        }
-    }
-}
-
  type Barter_init_args = {
     $$type: 'Barter_init_args';
+    sender: Address;
 }
 
 function initBarter_init_args(src: Barter_init_args) {
     return (builder: Builder) => {
         let b_0 = builder;
+        b_0.storeAddress(src.sender);
     };
 }
 
-async function Barter_init() {
-    const __code = Cell.fromBase64('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');
-    const __system = Cell.fromBase64('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');
+async function Barter_init(sender: Address) {
+    const __code = Cell.fromBase64('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');
+    const __system = Cell.fromBase64('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');
     let builder = beginCell();
     builder.storeRef(__system);
     builder.storeUint(0, 1);
-    initBarter_init_args({ $$type: 'Barter_init_args' })(builder);
+    initBarter_init_args({ $$type: 'Barter_init_args', sender })(builder);
     const __data = builder.endCell();
     return { code: __code, data: __data };
 }
@@ -1079,15 +911,12 @@ const Barter_types: ABIType[] = [
     {"name":"AddBottle","header":283242353,"fields":[{"name":"address","type":{"kind":"simple","type":"address","optional":false}},{"name":"amount","type":{"kind":"simple","type":"uint","optional":false,"format":32}}]},
     {"name":"SendBottle","header":null,"fields":[{"name":"masterAddress","type":{"kind":"simple","type":"address","optional":false}},{"name":"name","type":{"kind":"simple","type":"string","optional":false}},{"name":"senderAddress","type":{"kind":"simple","type":"address","optional":false}},{"name":"total","type":{"kind":"simple","type":"uint","optional":false,"format":32}}]},
     {"name":"ArgSendBottle","header":3370528856,"fields":[{"name":"masterAddress","type":{"kind":"simple","type":"address","optional":false}},{"name":"senderAddress","type":{"kind":"simple","type":"address","optional":false}},{"name":"name","type":{"kind":"simple","type":"string","optional":false}},{"name":"total","type":{"kind":"simple","type":"uint","optional":false,"format":32}}]},
-    {"name":"ArgVerifyBottle","header":2964497605,"fields":[{"name":"address","type":{"kind":"simple","type":"address","optional":false}},{"name":"masterAddress","type":{"kind":"simple","type":"address","optional":false}},{"name":"amount","type":{"kind":"simple","type":"int","optional":false,"format":257}}]},
-    {"name":"BagItem","header":null,"fields":[{"name":"id","type":{"kind":"simple","type":"uint","optional":false,"format":256}},{"name":"level","type":{"kind":"simple","type":"uint","optional":false,"format":256}},{"name":"name","type":{"kind":"simple","type":"string","optional":false}},{"name":"image_url","type":{"kind":"simple","type":"string","optional":false}},{"name":"max","type":{"kind":"simple","type":"uint","optional":false,"format":256}},{"name":"price","type":{"kind":"simple","type":"uint","optional":false,"format":256}}]},
-    {"name":"ArgBagItem","header":1606671232,"fields":[{"name":"id","type":{"kind":"simple","type":"uint","optional":false,"format":256}},{"name":"level","type":{"kind":"simple","type":"uint","optional":false,"format":256}},{"name":"name","type":{"kind":"simple","type":"string","optional":false}},{"name":"image_url","type":{"kind":"simple","type":"string","optional":false}},{"name":"max","type":{"kind":"simple","type":"uint","optional":false,"format":256}},{"name":"price","type":{"kind":"simple","type":"uint","optional":false,"format":256}}]},
-    {"name":"Master","header":null,"fields":[{"name":"name","type":{"kind":"simple","type":"string","optional":false}},{"name":"camp","type":{"kind":"simple","type":"string","optional":false}},{"name":"phone","type":{"kind":"simple","type":"uint","optional":false,"format":256}},{"name":"status","type":{"kind":"simple","type":"bool","optional":false}}]},
-    {"name":"ArgAddMaster","header":7850487,"fields":[{"name":"master","type":{"kind":"simple","type":"address","optional":false}},{"name":"name","type":{"kind":"simple","type":"string","optional":false}},{"name":"camp","type":{"kind":"simple","type":"string","optional":false}},{"name":"phone","type":{"kind":"simple","type":"uint","optional":false,"format":256}},{"name":"status","type":{"kind":"simple","type":"bool","optional":false}}]},
-    {"name":"Bags","header":null,"fields":[{"name":"bags","type":{"kind":"simple","type":"string","optional":false}}]},
+    {"name":"ArgVerifyBottle","header":1650289486,"fields":[{"name":"address","type":{"kind":"simple","type":"address","optional":false}},{"name":"amount","type":{"kind":"simple","type":"int","optional":false,"format":257}}]},
+    {"name":"Item","header":null,"fields":[{"name":"name","type":{"kind":"simple","type":"string","optional":true}},{"name":"max","type":{"kind":"simple","type":"uint","optional":true,"format":256}},{"name":"total","type":{"kind":"simple","type":"uint","optional":true,"format":256}}]},
+    {"name":"Master","header":null,"fields":[{"name":"name","type":{"kind":"simple","type":"string","optional":false}},{"name":"camp","type":{"kind":"simple","type":"string","optional":false}},{"name":"phone","type":{"kind":"simple","type":"uint","optional":false,"format":256}},{"name":"totalBottle","type":{"kind":"simple","type":"uint","optional":false,"format":256}},{"name":"status","type":{"kind":"simple","type":"bool","optional":false}}]},
+    {"name":"ArgAddMaster","header":226298563,"fields":[{"name":"master","type":{"kind":"simple","type":"address","optional":false}},{"name":"name","type":{"kind":"simple","type":"string","optional":false}},{"name":"camp","type":{"kind":"simple","type":"string","optional":false}},{"name":"phone","type":{"kind":"simple","type":"uint","optional":false,"format":256}},{"name":"totalBottle","type":{"kind":"simple","type":"uint","optional":false,"format":256}},{"name":"status","type":{"kind":"simple","type":"bool","optional":false}}]},
     {"name":"ArgWaitMaster","header":2298658685,"fields":[{"name":"sender","type":{"kind":"simple","type":"address","optional":false}},{"name":"master","type":{"kind":"simple","type":"address","optional":false}}]},
     {"name":"ArgClearSendBottle","header":1064188078,"fields":[{"name":"masterAddress","type":{"kind":"simple","type":"address","optional":false}}]},
-    {"name":"ArgAddUserBag","header":891968436,"fields":[{"name":"address","type":{"kind":"simple","type":"address","optional":false}},{"name":"bags","type":{"kind":"simple","type":"string","optional":false}}]},
 ]
 
 const Barter_getters: ABIGetter[] = [
@@ -1096,27 +925,24 @@ const Barter_getters: ABIGetter[] = [
     {"name":"StatusMaster","arguments":[{"name":"master","type":{"kind":"simple","type":"address","optional":false}},{"name":"sender","type":{"kind":"simple","type":"address","optional":false}}],"returnType":{"kind":"simple","type":"bool","optional":false}},
     {"name":"SendBottles","arguments":[],"returnType":{"kind":"dict","key":"address","value":"SendBottle","valueFormat":"ref"}},
     {"name":"TotalBottle","arguments":[{"name":"address","type":{"kind":"simple","type":"address","optional":false}}],"returnType":{"kind":"simple","type":"int","optional":false,"format":257}},
-    {"name":"BagProducts","arguments":[],"returnType":{"kind":"dict","key":"int","value":"BagItem","valueFormat":"ref"}},
-    {"name":"currentBag","arguments":[{"name":"address","type":{"kind":"simple","type":"address","optional":false}}],"returnType":{"kind":"simple","type":"Bags","optional":false}},
 ]
 
 const Barter_receivers: ABIReceiver[] = [
     {"receiver":"internal","message":{"kind":"typed","type":"ArgAddMaster"}},
+    {"receiver":"internal","message":{"kind":"typed","type":"ArgClearSendBottle"}},
     {"receiver":"internal","message":{"kind":"typed","type":"ArgSendBottle"}},
     {"receiver":"internal","message":{"kind":"typed","type":"ArgVerifyBottle"}},
-    {"receiver":"internal","message":{"kind":"typed","type":"ArgBagItem"}},
-    {"receiver":"internal","message":{"kind":"typed","type":"ArgAddUserBag"}},
     {"receiver":"internal","message":{"kind":"typed","type":"Deploy"}},
 ]
 
 export class Barter implements Contract {
     
-    static async init() {
-        return await Barter_init();
+    static async init(sender: Address) {
+        return await Barter_init(sender);
     }
     
-    static async fromInit() {
-        const init = await Barter_init();
+    static async fromInit(sender: Address) {
+        const init = await Barter_init(sender);
         const address = contractAddress(0, init);
         return new Barter(address, init);
     }
@@ -1139,23 +965,20 @@ export class Barter implements Contract {
         this.init = init;
     }
     
-    async send(provider: ContractProvider, via: Sender, args: { value: bigint, bounce?: boolean| null | undefined }, message: ArgAddMaster | ArgSendBottle | ArgVerifyBottle | ArgBagItem | ArgAddUserBag | Deploy) {
+    async send(provider: ContractProvider, via: Sender, args: { value: bigint, bounce?: boolean| null | undefined }, message: ArgAddMaster | ArgClearSendBottle | ArgSendBottle | ArgVerifyBottle | Deploy) {
         
         let body: Cell | null = null;
         if (message && typeof message === 'object' && !(message instanceof Slice) && message.$$type === 'ArgAddMaster') {
             body = beginCell().store(storeArgAddMaster(message)).endCell();
+        }
+        if (message && typeof message === 'object' && !(message instanceof Slice) && message.$$type === 'ArgClearSendBottle') {
+            body = beginCell().store(storeArgClearSendBottle(message)).endCell();
         }
         if (message && typeof message === 'object' && !(message instanceof Slice) && message.$$type === 'ArgSendBottle') {
             body = beginCell().store(storeArgSendBottle(message)).endCell();
         }
         if (message && typeof message === 'object' && !(message instanceof Slice) && message.$$type === 'ArgVerifyBottle') {
             body = beginCell().store(storeArgVerifyBottle(message)).endCell();
-        }
-        if (message && typeof message === 'object' && !(message instanceof Slice) && message.$$type === 'ArgBagItem') {
-            body = beginCell().store(storeArgBagItem(message)).endCell();
-        }
-        if (message && typeof message === 'object' && !(message instanceof Slice) && message.$$type === 'ArgAddUserBag') {
-            body = beginCell().store(storeArgAddUserBag(message)).endCell();
         }
         if (message && typeof message === 'object' && !(message instanceof Slice) && message.$$type === 'Deploy') {
             body = beginCell().store(storeDeploy(message)).endCell();
@@ -1202,21 +1025,6 @@ export class Barter implements Contract {
         builder.writeAddress(address);
         let source = (await provider.get('TotalBottle', builder.build())).stack;
         let result = source.readBigNumber();
-        return result;
-    }
-    
-    async getBagProducts(provider: ContractProvider) {
-        let builder = new TupleBuilder();
-        let source = (await provider.get('BagProducts', builder.build())).stack;
-        let result = Dictionary.loadDirect(Dictionary.Keys.BigInt(257), dictValueParserBagItem(), source.readCellOpt());
-        return result;
-    }
-    
-    async getCurrentBag(provider: ContractProvider, address: Address) {
-        let builder = new TupleBuilder();
-        builder.writeAddress(address);
-        let source = (await provider.get('currentBag', builder.build())).stack;
-        const result = loadTupleBags(source);
         return result;
     }
     

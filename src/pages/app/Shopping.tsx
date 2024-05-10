@@ -1,15 +1,35 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import { ArrowUp, BuyCrypto, CloseCircle } from "iconsax-react";
 import AppButton from "../../components/app/AppButton";
+import { useTonAddress } from "@tonconnect/ui-react";
+import { useTonClient } from "../../hooks/useTonClient";
+import config from "../../../config";
+import { Address, toNano } from "@ton/core";
+import { BagItem, Barter } from "../../contracts/Barter";
+import { useTonConnect } from "../../hooks/useTonConnect";
+
+type InfoProductType = {
+  id: bigint;
+  level: bigint;
+  image_url: string;
+  name: string;
+  price: string;
+};
+
+function sleep(ms: number): Promise<void> {
+  return new Promise((resolve) => setTimeout(resolve, ms));
+}
 
 function Shopping() {
   const [sortBy, setSortBy] = useState("default");
   const [searchQuery, setSearchQuery] = useState("");
-  const [selectedProduct, setSelectedProduct] = useState(null);
+  const [selectedProduct, setSelectedProduct] = useState<BagItem>();
   const [purchaseSuccess, setPurchaseSuccess] = useState(false);
-  const [isOwned, setIsOwned] = useState(false);
-
+  const [addToItem, setAddToItem] = useState(false);
+  const [newBag, setNewBag] = useState<string>();
+  const [myBags, setMyBags] = useState<string[]>();
+  const { sender } = useTonConnect();
   const handleChange = (e) => {
     setSortBy(e.target.value);
   };
@@ -27,66 +47,92 @@ function Shopping() {
     setPurchaseSuccess(false); // Reset purchase success message
   };
 
-  const handlePurchase = () => {
+  const handlePurchase = async (selectedProduct: BagItem) => {
+    const start_admin_balance = await client?.getBalance(
+      Address.parse("0QBNwC2ou0P7AOxsahUPuUZQn71aTIxzXa9BnMWB0MQgAY1Y")
+    );
+
+    await sender.send({
+      to: Address.parse("0QBNwC2ou0P7AOxsahUPuUZQn71aTIxzXa9BnMWB0MQgAY1Y"),
+      value: selectedProduct.price,
+    });
+    let end_admin_balance = await client?.getBalance(
+      Address.parse("0QBNwC2ou0P7AOxsahUPuUZQn71aTIxzXa9BnMWB0MQgAY1Y")
+    );
+    while (start_admin_balance == end_admin_balance) {
+      end_admin_balance = await client?.getBalance(
+        Address.parse("0QBNwC2ou0P7AOxsahUPuUZQn71aTIxzXa9BnMWB0MQgAY1Y")
+      );
+      await sleep(5000);
+    }
+
     // Perform purchase logic here
+    setAddToItem(true);
+    setNewBag(selectedProduct.id.toString());
     setPurchaseSuccess(true);
-    setIsOwned(true);
     setTimeout(() => {
       setPurchaseSuccess(false);
     }, 2000); // Hide success message after 2 seconds
   };
 
+  const friendlyAddress = useTonAddress();
+  const client = useTonClient();
+  const { barterContract } = config;
+
+  const [infoProduct, setInfoProduct] = useState<BagItem[]>();
   const sortProducts = () => {
+    if (infoProduct == undefined) return;
     let filteredProducts = [...infoProduct];
 
     // Filter based on search query
     if (searchQuery.trim() !== "") {
       filteredProducts = filteredProducts.filter((product) =>
-        product.productName.toLowerCase().includes(searchQuery.toLowerCase())
+        product.name.toLowerCase().includes(searchQuery.toLowerCase())
       );
     }
-
     // Sorting
     if (sortBy === "levelLowToHigh") {
-      return filteredProducts.sort((a, b) => a.level - b.level);
+      return filteredProducts.sort((a, b) => Number(a.level) - Number(b.level));
     } else if (sortBy === "levelHighToLow") {
-      return filteredProducts.sort((a, b) => b.level - a.level);
+      return filteredProducts.sort((a, b) => Number(b.level) - Number(a.level));
     } else {
       return filteredProducts;
     }
   };
+  useEffect(() => {
+    const get = async () => {
+      if (!client) return;
+      const barterMaster = client.open(
+        Barter.fromAddress(Address.parse(barterContract.toString()))
+      );
+      if (!friendlyAddress) return;
+      const infoProduct: BagItem[] = (
+        await barterMaster.getBagProducts()
+      ).values();
+      setInfoProduct(infoProduct);
+      console.log(infoProduct);
 
-  const infoProduct = [
-    {
-      id: 1,
-      level: 3,
-      productImages: "/BAG1.png",
-      productName: "Tas NFT Berbentuk Daun",
-      hargaToken: `0.0005`,
-    },
-    {
-      id: 2,
-      level: 6,
-      productImages: "/BAG2.png",
-      productName: "Tas NFT Bergambar sunset",
-      hargaToken: `0.0011`,
-    },
-    {
-      id: 3,
-      level: 5,
-      productImages: "/BAG3.png",
-      productName: "Tas NFT Bergambar laut",
-      hargaToken: `0.0009`,
-    },
-    {
-      id: 4,
-      level: 3,
-      productImages: "/BAG4.png",
-      productName: "Tas NFT musim semi",
-      hargaToken: `0.0005`,
-    },
-  ];
+      // TODO ADD NEW FUNCTION
+      const myBags = (
+        await barterMaster.getCurrentBag(Address.parse(friendlyAddress))
+      ).bags.split("-");
+      setMyBags(myBags);
 
+      if (addToItem) {
+        await barterMaster.send(
+          sender,
+          { value: toNano("0.01") },
+          {
+            $$type: "ArgAddUserBag",
+            address: Address.parse(friendlyAddress),
+            bags: myBags + "-" + newBag,
+          }
+        );
+        setNewBag("");
+      }
+    };
+    get();
+  }, [addToItem, barterContract, client, friendlyAddress, newBag, sender]);
   return (
     <>
       <div>
@@ -123,30 +169,33 @@ function Shopping() {
 
           {/* List Produk */}
           <ul className="grid gap-4 sm:grid-cols-2 ">
-            {sortProducts().map((produknya) => (
-              <li key={produknya.id} className="border hover:bg-primary-100 rounded-lg p-1 border-t-2 border-l-2 border-r-[5px] border-b-[3px] border-border">
+            {sortProducts()?.map((produknya) => (
+              <li
+                key={produknya.id}
+                className="border hover:bg-primary-100 rounded-lg p-1 border-t-2 border-l-2 border-r-[5px] border-b-[3px] border-border"
+              >
                 <Link
                   to="#"
                   className="group block  overflow-hidden"
                   onClick={() => handleShowDetails(produknya)}
                 >
                   <img
-                    src={produknya.productImages}
+                    src={produknya.image_url}
                     alt={produknya.name}
                     className="size-44 object-cover"
                   />
 
                   <div className="relative  pl-2">
-                    <p className="font-bold">Level {produknya.level}</p>
+                    <p className="font-bold">Level {Number(produknya.level)}</p>
                     <h3 className="text-xs font-semibold text-neutral-700">
-                      {produknya.productName}
+                      {produknya.name}
                     </h3>
 
                     <p className="mt-2">
                       <span className="sr-only"> Regular Price </span>
 
                       <span className="tracking-wider font-bold text-neutral-900">
-                        {produknya.hargaToken} KLO
+                        {Number(produknya.price) / 1000000000} KLO
                       </span>
                     </p>
                   </div>
@@ -163,11 +212,9 @@ function Shopping() {
               <CloseCircle variant="Bulk" className="text-primary-600" />
             </button>
             <div className=" flex flex-col justify-center items-center text-center">
-              <h4 className="text-md font-bold">
-                {selectedProduct.productName}
-              </h4>
+              <h4 className="text-md font-bold">{selectedProduct.name}</h4>
               <img
-                src={selectedProduct.productImages}
+                src={selectedProduct.image_url}
                 className="size-40 mt-2"
                 alt="NFT"
               />
@@ -175,8 +222,10 @@ function Shopping() {
             <div className="mx-8 my-2">
               <div className="mt-2 font-medium">
                 <div className="flex justify-between">
-                  <p>Level : {selectedProduct.level}</p>
-                  <p>Harga : {selectedProduct.hargaToken} KLO</p>
+                  <p>Level : {Number(selectedProduct.level)}</p>
+                  <p>
+                    Harga : {Number(selectedProduct.price) / 1000000000} KLO
+                  </p>
                 </div>
                 <div className="mt-2">
                   <p className="font-bold">Penambahan</p>
@@ -198,10 +247,13 @@ function Shopping() {
               </div>
             </div>
             <div className="text-center">
-              {isOwned ? (
+              {myBags?.includes(selectedProduct.id.toString()) ? (
                 <AppButton text="Sudah Dimiliki" onClick={undefined} />
               ) : (
-                <AppButton onClick={handlePurchase} text="Beli" />
+                <AppButton
+                  onClick={() => handlePurchase(selectedProduct)}
+                  text="Beli"
+                />
               )}
             </div>
           </div>
@@ -214,7 +266,7 @@ function Shopping() {
           <div className="bg-white p-4 border border-gray-300 rounded-md max-w-sm flex flex-col text-center items-center">
             <BuyCrypto className="text-green-500 w-12 h-12 mb-2" />
             <p className="text-lg font-bold">
-              Pembelian <br /> {selectedProduct.productName} <br /> Sukses!
+              Pembelian <br /> {selectedProduct.name} <br /> Sukses!
             </p>
           </div>
         </div>

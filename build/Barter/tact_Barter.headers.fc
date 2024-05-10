@@ -27,6 +27,12 @@ slice __tact_context_get_sender() inline;
 ;; __tact_store_bool
 builder __tact_store_bool(builder b, int v) inline;
 
+;; __tact_dict_set_int_cell
+(cell, ()) __tact_dict_set_int_cell(cell d, int kl, int k, cell v) inline;
+
+;; __tact_dict_set_slice_int
+(cell, ()) __tact_dict_set_slice_int(cell d, int kl, slice k, int v, int vl) inline;
+
 ;; __tact_dict_set_slice_uint
 (cell, ()) __tact_dict_set_slice_uint(cell d, int kl, slice k, int v, int vl) inline;
 
@@ -76,82 +82,121 @@ tuple $SendBottle$_load_opt(cell cl) inline;
 (slice, ((slice, slice, slice, int))) $ArgSendBottle$_load(slice sc_0) inline;
 
 ;; $ArgVerifyBottle$_load
-(slice, ((slice, int))) $ArgVerifyBottle$_load(slice sc_0) inline;
+(slice, ((slice, slice, int))) $ArgVerifyBottle$_load(slice sc_0) inline;
+
+;; $BagItem$_store
+builder $BagItem$_store(builder build_0, (int, int, slice, slice, int, int) v) inline_ref;
+
+;; $BagItem$_store_cell
+cell $BagItem$_store_cell((int, int, slice, slice, int, int) v) inline;
+
+;; $ArgBagItem$_load
+(slice, ((int, int, slice, slice, int, int))) $ArgBagItem$_load(slice sc_0) inline_ref;
 
 ;; $Master$_store
-builder $Master$_store(builder build_0, (slice, slice, int, int, int) v) inline;
+builder $Master$_store(builder build_0, (slice, slice, int, int) v) inline;
 
 ;; $Master$_store_cell
-cell $Master$_store_cell((slice, slice, int, int, int) v) inline;
+cell $Master$_store_cell((slice, slice, int, int) v) inline;
 
 ;; $Master$_load
-(slice, ((slice, slice, int, int, int))) $Master$_load(slice sc_0) inline;
+(slice, ((slice, slice, int, int))) $Master$_load(slice sc_0) inline;
 
 ;; $Master$_as_optional
-tuple $Master$_as_optional((slice, slice, int, int, int) v) inline;
+tuple $Master$_as_optional((slice, slice, int, int) v) inline;
 
 ;; $Master$_load_opt
 tuple $Master$_load_opt(cell cl) inline;
 
 ;; $ArgAddMaster$_load
-(slice, ((slice, slice, slice, int, int, int))) $ArgAddMaster$_load(slice sc_0) inline_ref;
+(slice, ((slice, slice, slice, int, int))) $ArgAddMaster$_load(slice sc_0) inline;
 
-;; $ArgClearSendBottle$_load
-(slice, ((slice))) $ArgClearSendBottle$_load(slice sc_0) inline;
+;; $Bags$_store
+builder $Bags$_store(builder build_0, (slice) v) inline;
+
+;; $Bags$_store_cell
+cell $Bags$_store_cell((slice) v) inline;
+
+;; $Bags$_load
+(slice, ((slice))) $Bags$_load(slice sc_0) inline;
+
+;; $Bags$_as_optional
+tuple $Bags$_as_optional((slice) v) inline;
+
+;; $Bags$_load_opt
+tuple $Bags$_load_opt(cell cl) inline;
+
+;; $ArgAddUserBag$_load
+(slice, ((slice, slice))) $ArgAddUserBag$_load(slice sc_0) inline;
 
 ;; $Barter$_store
-builder $Barter$_store(builder build_0, (cell, cell, cell) v) inline;
+builder $Barter$_store(builder build_0, (cell, cell, cell, cell, cell, cell) v) inline;
 
 ;; $Barter$_load
-(slice, ((cell, cell, cell))) $Barter$_load(slice sc_0) inline;
+(slice, ((cell, cell, cell, cell, cell, cell))) $Barter$_load(slice sc_0) inline;
 
 ;; $StateInit$_not_null
 ((cell, cell)) $StateInit$_not_null(tuple v) inline;
 
-;; $Barter$init$_load
-(slice, ((slice))) $Barter$init$_load(slice sc_0) inline;
+;; $Bags$_not_null
+((slice)) $Bags$_not_null(tuple v) inline;
+
+;; $Bags$_to_external
+(slice) $Bags$_to_external(((slice)) v) inline;
+
+;; $Master$_constructor_name_camp_phone_status
+((slice, slice, int, int)) $Master$_constructor_name_camp_phone_status(slice name, slice camp, int phone, int status) inline;
 
 ;; $Barter$_contract_init
-(cell, cell, cell) $Barter$_contract_init(slice $sender) impure inline_ref;
+(cell, cell, cell, cell, cell, cell) $Barter$_contract_init() impure inline_ref;
 
 ;; $Barter$_contract_load
-(cell, cell, cell) $Barter$_contract_load() impure inline_ref;
+(cell, cell, cell, cell, cell, cell) $Barter$_contract_load() impure inline_ref;
 
 ;; $Barter$_contract_store
-() $Barter$_contract_store((cell, cell, cell) v) impure inline;
+() $Barter$_contract_store((cell, cell, cell, cell, cell, cell) v) impure inline;
 
 ;; $global_send
 () $global_send((int, slice, int, int, cell, cell, cell) $params) impure inline_ref;
 
 ;; $Barter$_fun_isMaster
-((cell, cell, cell), int) $Barter$_fun_isMaster((cell, cell, cell) $self, slice $sender) impure inline_ref;
+((cell, cell, cell, cell, cell, cell), int) $Barter$_fun_isMaster((cell, cell, cell, cell, cell, cell) $self, slice $sender) impure inline_ref;
 
 ;; $Barter$_fun_Master
-((cell, cell, cell), cell) $Barter$_fun_Master((cell, cell, cell) $self) impure inline_ref;
+((cell, cell, cell, cell, cell, cell), cell) $Barter$_fun_Master((cell, cell, cell, cell, cell, cell) $self) impure inline_ref;
 
 ;; $Barter$_fun_StatusMaster
-((cell, cell, cell), int) $Barter$_fun_StatusMaster((cell, cell, cell) $self, slice $master, slice $sender) impure inline_ref;
+((cell, cell, cell, cell, cell, cell), int) $Barter$_fun_StatusMaster((cell, cell, cell, cell, cell, cell) $self, slice $master, slice $sender) impure inline_ref;
 
 ;; $Barter$_fun_SendBottles
-((cell, cell, cell), cell) $Barter$_fun_SendBottles((cell, cell, cell) $self) impure inline_ref;
+((cell, cell, cell, cell, cell, cell), cell) $Barter$_fun_SendBottles((cell, cell, cell, cell, cell, cell) $self) impure inline_ref;
 
 ;; $Barter$_fun_TotalBottle
-((cell, cell, cell), int) $Barter$_fun_TotalBottle((cell, cell, cell) $self, slice $address) impure inline_ref;
+((cell, cell, cell, cell, cell, cell), int) $Barter$_fun_TotalBottle((cell, cell, cell, cell, cell, cell) $self, slice $address) impure inline_ref;
+
+;; $Barter$_fun_BagProducts
+((cell, cell, cell, cell, cell, cell), cell) $Barter$_fun_BagProducts((cell, cell, cell, cell, cell, cell) $self) impure inline_ref;
+
+;; $Bags$_constructor_bags
+((slice)) $Bags$_constructor_bags(slice bags) inline;
+
+;; $Barter$_fun_currentBag
+((cell, cell, cell, cell, cell, cell), (slice)) $Barter$_fun_currentBag((cell, cell, cell, cell, cell, cell) $self, slice $address) impure inline_ref;
 
 ;; $SendParameters$_constructor_bounce_to_value_mode_body_code_data
 ((int, slice, int, int, cell, cell, cell)) $SendParameters$_constructor_bounce_to_value_mode_body_code_data(int bounce, slice to, int value, int mode, cell body, cell code, cell data) inline;
 
 ;; $Barter$_fun_forward
-((cell, cell, cell), ()) $Barter$_fun_forward((cell, cell, cell) $self, slice $to, cell $body, int $bounce, tuple $init) impure inline_ref;
+((cell, cell, cell, cell, cell, cell), ()) $Barter$_fun_forward((cell, cell, cell, cell, cell, cell) $self, slice $to, cell $body, int $bounce, tuple $init) impure inline_ref;
 
 ;; $Barter$_fun_notify
-((cell, cell, cell), ()) $Barter$_fun_notify((cell, cell, cell) $self, cell $body) impure inline;
-
-;; $Master$_constructor_name_camp_phone_totalBottle_status
-((slice, slice, int, int, int)) $Master$_constructor_name_camp_phone_totalBottle_status(slice name, slice camp, int phone, int totalBottle, int status) inline;
+((cell, cell, cell, cell, cell, cell), ()) $Barter$_fun_notify((cell, cell, cell, cell, cell, cell) $self, cell $body) impure inline;
 
 ;; $SendBottle$_constructor_name_masterAddress_senderAddress_total
 ((slice, slice, slice, int)) $SendBottle$_constructor_name_masterAddress_senderAddress_total(slice name, slice masterAddress, slice senderAddress, int total) inline;
+
+;; $BagItem$_constructor_id_level_name_image_url_max_price
+((int, int, slice, slice, int, int)) $BagItem$_constructor_id_level_name_image_url_max_price(int id, int level, slice name, slice image_url, int max, int price) inline;
 
 ;; $DeployOk$_constructor_queryId
 ((int)) $DeployOk$_constructor_queryId(int queryId) inline;

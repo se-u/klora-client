@@ -1,11 +1,8 @@
-import { Navigate, Outlet } from "react-router-dom";
+import { Outlet } from "react-router-dom";
 import BottomNav from "../components/app/BottomNav";
 import TopBar from "../components/app/TopBar";
 
-function AppLayout({ connected }: { connected: boolean }) {
-  if (!connected) {
-    console.log('TODO: return <Navigate to="/" replace />;');
-  }
+function AppLayout() {
   return (
     <div className="bg-primary-900 w-screen h-screen font-dmsans">
       <div className="relative bg-white  max-w-sm mx-auto h-screen">

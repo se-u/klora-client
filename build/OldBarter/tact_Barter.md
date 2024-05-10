@@ -1,9 +1,9 @@
 # TACT Compilation Report
 Contract: Barter
-BOC Size: 2426 bytes
+BOC Size: 1841 bytes
 
 # Types
-Total Types: 19
+Total Types: 16
 
 ## StateInit
 TLB: `_ code:^cell data:^cell = StateInit`
@@ -46,28 +46,20 @@ TLB: `arg_send_bottle#c8e63058 masterAddress:address senderAddress:address name:
 Signature: `ArgSendBottle{masterAddress:address,senderAddress:address,name:^string,total:uint32}`
 
 ## ArgVerifyBottle
-TLB: `arg_verify_bottle#b0b2a4c5 address:address masterAddress:address amount:int257 = ArgVerifyBottle`
-Signature: `ArgVerifyBottle{address:address,masterAddress:address,amount:int257}`
+TLB: `arg_verify_bottle#625d6b4e address:address amount:int257 = ArgVerifyBottle`
+Signature: `ArgVerifyBottle{address:address,amount:int257}`
 
-## BagItem
-TLB: `_ id:uint256 level:uint256 name:^string image_url:^string max:uint256 price:uint256 = BagItem`
-Signature: `BagItem{id:uint256,level:uint256,name:^string,image_url:^string,max:uint256,price:uint256}`
-
-## ArgBagItem
-TLB: `arg_bag_item#5fc3db80 id:uint256 level:uint256 name:^string image_url:^string max:uint256 price:uint256 = ArgBagItem`
-Signature: `ArgBagItem{id:uint256,level:uint256,name:^string,image_url:^string,max:uint256,price:uint256}`
+## Item
+TLB: `_ name:Maybe ^string max:Maybe uint256 total:Maybe uint256 = Item`
+Signature: `Item{name:Maybe ^string,max:Maybe uint256,total:Maybe uint256}`
 
 ## Master
-TLB: `_ name:^string camp:^string phone:uint256 status:bool = Master`
-Signature: `Master{name:^string,camp:^string,phone:uint256,status:bool}`
+TLB: `_ name:^string camp:^string phone:uint256 totalBottle:uint256 status:bool = Master`
+Signature: `Master{name:^string,camp:^string,phone:uint256,totalBottle:uint256,status:bool}`
 
 ## ArgAddMaster
-TLB: `arg_add_master#0077c9f7 master:address name:^string camp:^string phone:uint256 status:bool = ArgAddMaster`
-Signature: `ArgAddMaster{master:address,name:^string,camp:^string,phone:uint256,status:bool}`
-
-## Bags
-TLB: `_ bags:^string = Bags`
-Signature: `Bags{bags:^string}`
+TLB: `arg_add_master#0d7d0ac3 master:address name:^string camp:^string phone:uint256 totalBottle:uint256 status:bool = ArgAddMaster`
+Signature: `ArgAddMaster{master:address,name:^string,camp:^string,phone:uint256,totalBottle:uint256,status:bool}`
 
 ## ArgWaitMaster
 TLB: `arg_wait_master#8902bf7d sender:address master:address = ArgWaitMaster`
@@ -77,12 +69,8 @@ Signature: `ArgWaitMaster{sender:address,master:address}`
 TLB: `arg_clear_send_bottle#3f6e38ae masterAddress:address = ArgClearSendBottle`
 Signature: `ArgClearSendBottle{masterAddress:address}`
 
-## ArgAddUserBag
-TLB: `arg_add_user_bag#352a5bb4 address:address bags:^string = ArgAddUserBag`
-Signature: `ArgAddUserBag{address:address,bags:^string}`
-
 # Get Methods
-Total Get Methods: 7
+Total Get Methods: 5
 
 ## isMaster
 Argument: sender
@@ -96,11 +84,6 @@ Argument: sender
 ## SendBottles
 
 ## TotalBottle
-Argument: address
-
-## BagProducts
-
-## currentBag
 Argument: address
 
 # Error Codes

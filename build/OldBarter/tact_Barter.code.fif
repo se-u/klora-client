@@ -7,8 +7,6 @@ PROGRAM{
   DECLPROC __tact_context_get
   DECLPROC __tact_context_get_sender
   DECLPROC __tact_store_bool
-  DECLPROC __tact_dict_set_int_cell
-  DECLPROC __tact_dict_set_slice_int
   DECLPROC __tact_dict_set_slice_uint
   DECLPROC __tact_dict_get_slice_uint
   DECLPROC __tact_dict_set_slice_cell
@@ -26,27 +24,17 @@ PROGRAM{
   DECLPROC $SendBottle$_load_opt
   DECLPROC $ArgSendBottle$_load
   DECLPROC $ArgVerifyBottle$_load
-  DECLPROC $BagItem$_store
-  DECLPROC $BagItem$_store_cell
-  DECLPROC $ArgBagItem$_load
   DECLPROC $Master$_store
   DECLPROC $Master$_store_cell
   DECLPROC $Master$_load
   DECLPROC $Master$_as_optional
   DECLPROC $Master$_load_opt
   DECLPROC $ArgAddMaster$_load
-  DECLPROC $Bags$_store
-  DECLPROC $Bags$_store_cell
-  DECLPROC $Bags$_load
-  DECLPROC $Bags$_as_optional
-  DECLPROC $Bags$_load_opt
-  DECLPROC $ArgAddUserBag$_load
+  DECLPROC $ArgClearSendBottle$_load
   DECLPROC $Barter$_store
   DECLPROC $Barter$_load
   DECLPROC $StateInit$_not_null
-  DECLPROC $Bags$_not_null
-  DECLPROC $Bags$_to_external
-  DECLPROC $Master$_constructor_name_camp_phone_status
+  DECLPROC $Barter$init$_load
   DECLPROC $Barter$_contract_init
   DECLPROC $Barter$_contract_load
   DECLPROC $Barter$_contract_store
@@ -56,28 +44,22 @@ PROGRAM{
   DECLPROC $Barter$_fun_StatusMaster
   DECLPROC $Barter$_fun_SendBottles
   DECLPROC $Barter$_fun_TotalBottle
-  DECLPROC $Barter$_fun_BagProducts
-  DECLPROC $Bags$_constructor_bags
-  DECLPROC $Barter$_fun_currentBag
   DECLPROC $SendParameters$_constructor_bounce_to_value_mode_body_code_data
   DECLPROC $Barter$_fun_forward
   DECLPROC $Barter$_fun_notify
+  DECLPROC $Master$_constructor_name_camp_phone_totalBottle_status
   DECLPROC $SendBottle$_constructor_name_masterAddress_senderAddress_total
-  DECLPROC $BagItem$_constructor_id_level_name_image_url_max_price
   DECLPROC $DeployOk$_constructor_queryId
   DECLPROC $Barter$_internal_binary_ArgAddMaster
+  DECLPROC $Barter$_internal_binary_ArgClearSendBottle
   DECLPROC $Barter$_internal_binary_ArgSendBottle
   DECLPROC $Barter$_internal_binary_ArgVerifyBottle
-  DECLPROC $Barter$_internal_binary_ArgBagItem
-  DECLPROC $Barter$_internal_binary_ArgAddUserBag
   DECLPROC $Barter$_internal_binary_Deploy
   92391 DECLMETHOD %isMaster
   123061 DECLMETHOD %Master
   86744 DECLMETHOD %StatusMaster
   100035 DECLMETHOD %SendBottles
   74330 DECLMETHOD %TotalBottle
-  72447 DECLMETHOD %BagProducts
-  125081 DECLMETHOD %currentBag
   113617 DECLMETHOD supported_interfaces
   121275 DECLMETHOD get_abi_ipfs
   115390 DECLMETHOD lazy_deployment_completed
@@ -131,35 +113,6 @@ PROGRAM{
   __tact_store_bool PROCINLINE:<{
     SWAP
     1 STI
-  }>
-  __tact_dict_set_int_cell PROCINLINE:<{
-    DUP
-    ISNULL
-    IF:<{
-      DROP
-      -ROT
-      DICTIDEL
-      DROP
-    }>ELSE<{
-      s1 s3 s3 XCHG3
-      DICTISETREF
-    }>
-  }>
-  __tact_dict_set_slice_int PROCINLINE:<{
-    OVER
-    ISNULL
-    IF:<{
-      2DROP
-      -ROT
-      DICTDEL
-      DROP
-    }>ELSE<{
-      NEWC
-      SWAP
-      STIX
-      s1 s3 s3 XCHG3
-      DICTSETB
-    }>
   }>
   __tact_dict_set_slice_uint PROCINLINE:<{
     OVER
@@ -321,95 +274,36 @@ PROGRAM{
   $ArgVerifyBottle$_load PROCINLINE:<{
     32 LDU
     SWAP
-    2964497605 PUSHINT
+    1650289486 PUSHINT
     EQUAL
     129 THROWIFNOT
-    __tact_load_address INLINECALLDICT
-    SWAP
     __tact_load_address INLINECALLDICT
     SWAP
     257 PUSHINT
     LDIX
-    3 -ROLL
-  }>
-  $BagItem$_store PROCREF:<{
-    s5 s6 XCHG2
-    256 STU
-    s1 s3 XCHG
-    256 STU
-    NEWC
-    ROT
-    STSLICER
-    ENDC
-    SWAP
-    STREF
-    NEWC
-    ROT
-    STSLICER
-    ENDC
-    SWAP
-    STREF
-    256 STU
-    SWAP
-    NEWC
-    256 STU
-    ENDC
-    SWAP
-    STREF
-  }>
-  $BagItem$_store_cell PROCINLINE:<{
-    NEWC
-    6 -ROLL
-    $BagItem$_store INLINECALLDICT
-    ENDC
-  }>
-  $ArgBagItem$_load PROCREF:<{
-    32 LDU
-    SWAP
-    1606671232 PUSHINT
-    EQUAL
-    129 THROWIFNOT
-    256 LDU
-    256 LDU
-    LDREF
-    SWAP
-    CTOS
-    SWAP
-    LDREF
-    SWAP
-    CTOS
-    SWAP
-    256 LDU
-    LDREF
-    SWAP
-    CTOS
-    256 LDU
-    DROP
-    s1 s6 XCHG
-    s1 s5 XCHG
-    s1 s4 XCHG
-    s3 s3 s0 XCHG3
+    -ROT
   }>
   $Master$_store PROCINLINE:<{
     NEWC
-    s0 s4 XCHG2
+    s0 s5 XCHG2
     STSLICER
     ENDC
-    s0 s4 XCHG2
+    s0 s5 XCHG2
     STREF
     NEWC
-    ROT
+    s0 s3 XCHG2
     STSLICER
     ENDC
-    SWAP
+    ROT
     STREF
+    256 STU
     s1 s2 XCHG
     256 STU
     1 STI
   }>
   $Master$_store_cell PROCINLINE:<{
     NEWC
-    4 -ROLL
+    5 -ROLL
     $Master$_store INLINECALLDICT
     ENDC
   }>
@@ -423,11 +317,12 @@ PROGRAM{
     CTOS
     SWAP
     256 LDU
+    256 LDU
     1 LDI
-    4 -ROLL
+    5 -ROLL
   }>
   $Master$_as_optional PROCINLINE:<{
-    4 TUPLE
+    5 TUPLE
   }>
   $Master$_load_opt PROCINLINE:<{
     DUP
@@ -438,14 +333,14 @@ PROGRAM{
     }>ELSE<{
       CTOS
       $Master$_load INLINECALLDICT
-      1 4 BLKDROP2
+      1 5 BLKDROP2
       $Master$_as_optional INLINECALLDICT
     }>
   }>
-  $ArgAddMaster$_load PROCINLINE:<{
+  $ArgAddMaster$_load PROCREF:<{
     32 LDU
     SWAP
-    7850487 PUSHINT
+    226298563 PUSHINT
     EQUAL
     129 THROWIFNOT
     __tact_load_address INLINECALLDICT
@@ -459,75 +354,25 @@ PROGRAM{
     CTOS
     SWAP
     256 LDU
+    256 LDU
     1 LDI
-    5 -ROLL
+    6 -ROLL
   }>
-  $Bags$_store PROCINLINE:<{
-    NEWC
-    SWAP
-    STSLICER
-    ENDC
-    SWAP
-    STREF
-  }>
-  $Bags$_store_cell PROCINLINE:<{
-    NEWC
-    SWAP
-    $Bags$_store INLINECALLDICT
-    ENDC
-  }>
-  $Bags$_load PROCINLINE:<{
-    LDREF
-    SWAP
-    CTOS
-  }>
-  $Bags$_as_optional PROCINLINE:<{
-    1 TUPLE
-  }>
-  $Bags$_load_opt PROCINLINE:<{
-    DUP
-    ISNULL
-    IF:<{
-      DROP
-      PUSHNULL
-    }>ELSE<{
-      CTOS
-      $Bags$_load INLINECALLDICT
-      NIP
-      $Bags$_as_optional INLINECALLDICT
-    }>
-  }>
-  $ArgAddUserBag$_load PROCINLINE:<{
+  $ArgClearSendBottle$_load PROCINLINE:<{
     32 LDU
     SWAP
-    891968436 PUSHINT
+    1064188078 PUSHINT
     EQUAL
     129 THROWIFNOT
     __tact_load_address INLINECALLDICT
-    SWAP
-    LDREF
-    SWAP
-    CTOS
-    s1 s2 XCHG
   }>
   $Barter$_store PROCINLINE:<{
-    s5 s6 XCHG2
+    s2 s3 XCHG2
     STDICT
-    s1 s3 XCHG
     STDICT
     SWAP
     NEWC
     STDICT
-    s1 s2 XCHG
-    STDICT
-    s1 s2 XCHG
-    STDICT
-    s0 s2 XCHG
-    NEWC
-    STDICT
-    ENDC
-    ROT
-    STREF
     ENDC
     SWAP
     STREF
@@ -539,15 +384,8 @@ PROGRAM{
     SWAP
     CTOS
     LDDICT
-    LDDICT
-    LDDICT
-    LDREF
     DROP
-    CTOS
-    LDDICT
-    DROP
-    s4 s6 XCHG
-    s4 s5 XCHG
+    s3 s3 s0 XCHG3
   }>
   $StateInit$_not_null PROCINLINE:<{
     DUP
@@ -555,40 +393,20 @@ PROGRAM{
     128 THROWIF
     2 UNTUPLE
   }>
-  $Bags$_not_null PROCINLINE:<{
-    DUP
-    ISNULL
-    128 THROWIF
-    1 UNTUPLE
-  }>
-  $Bags$_to_external PROCINLINE:<{
-  }>
-  $Master$_constructor_name_camp_phone_status PROCINLINE:<{
+  $Barter$init$_load PROCINLINE:<{
+    __tact_load_address INLINECALLDICT
   }>
   $Barter$_contract_init PROCREF:<{
     PUSHNULL
     PUSHNULL
     PUSHNULL
-    PUSHNULL
-    PUSHNULL
-    PUSHNULL
     267 PUSHINT
-    B{b5ee9c724101010100240000438009b805b517687f601d8d8d42a1f728ca13f7ab49918e6bb5e83398b03a188400307d09773f} B>boc <s PUSHSLICE
-    B{b5ee9c7241010101000b00001253656261737469616e6f4f9877} B>boc <s PUSHSLICE
-    B{b5ee9c7241010101001700002a5544494e5553204b4c4f5241204241534543414d50170f0b3c} B>boc <s PUSHSLICE
-    62851558952152 PUSHINT
-    FALSE
-    $Master$_constructor_name_camp_phone_status INLINECALLDICT
-    $Master$_store_cell INLINECALLDICT
-    s3 s8 XCHG
-    __tact_dict_set_slice_cell INLINECALLDICT
-    267 PUSHINT
-    B{b5ee9c724101010100240000438009b805b517687f601d8d8d42a1f728ca13f7ab49918e6bb5e83398b03a188400307d09773f} B>boc <s PUSHSLICE
-    s2 s4 XCHG
+    ROT
+    s0 s4 XCHG
     0 PUSHINT
     8 PUSHPOW2
     __tact_dict_set_slice_uint INLINECALLDICT
-    s0 s1 s5 XCHG3
+    s1 s2 XCHG
   }>
   $Barter$_contract_load PROCREF:<{
     c4 PUSH
@@ -600,14 +418,16 @@ PROGRAM{
     SWAP
     IFJMP:<{
       $Barter$_load INLINECALLDICT
-      1 6 BLKDROP2
+      1 3 BLKDROP2
     }>
-    DROP
     MYADDR
     11 PLDU
     10 PUSHPOW2
     EQUAL
     137 THROWIFNOT
+    $Barter$init$_load INLINECALLDICT
+    SWAP
+    ENDS
     $Barter$_contract_init INLINECALLDICT
   }>
   $Barter$_contract_store PROCINLINE:<{
@@ -618,7 +438,7 @@ PROGRAM{
     TRUE
     SWAP
     1 STI
-    6 -ROLL
+    3 -ROLL
     $Barter$_store INLINECALLDICT
     ENDC
     c4 POP
@@ -727,7 +547,7 @@ PROGRAM{
   }>
   $Barter$_fun_isMaster PROCREF:<{
     267 PUSHINT
-    s7 PUSH
+    s4 PUSH
     s0 s2 XCHG
     __tact_dict_get_slice_cell INLINECALLDICT
     $Master$_load_opt INLINECALLDICT
@@ -738,12 +558,12 @@ PROGRAM{
     TRUE
   }>
   $Barter$_fun_Master PROCREF:<{
-    s5 PUSH
+    s2 PUSH
   }>
   $Barter$_fun_StatusMaster PROCREF:<{
     c2 SAVE
     SAMEALTSAVE
-    s5 PUSH
+    s3 PUSH
     267 PUSHINT
     s3 PUSH
     __tact_dict_get_slice_cell INLINECALLDICT
@@ -752,7 +572,7 @@ PROGRAM{
     NOT
     IF:<{
       267 PUSHINT
-      s6 s0 s2 PUXC2
+      s4 s0 s2 PUXC2
       __tact_dict_get_slice_cell INLINECALLDICT
       $SendBottle$_load_opt INLINECALLDICT
       $SendBottle$_not_null INLINECALLDICT
@@ -769,10 +589,10 @@ PROGRAM{
     FALSE
   }>
   $Barter$_fun_SendBottles PROCREF:<{
-    s3 PUSH
+    OVER
   }>
   $Barter$_fun_TotalBottle PROCREF:<{
-    s3 PUSH
+    OVER
     267 PUSHINT
     s2 PUSH
     8 PUSHPOW2
@@ -783,35 +603,11 @@ PROGRAM{
       0 PUSHINT
     }>
     267 PUSHINT
-    s4 PUSH
+    s2 PUSH
     s0 s2 XCHG
     8 PUSHPOW2
     __tact_dict_get_slice_uint INLINECALLDICT
     __tact_not_null INLINECALLDICT
-  }>
-  $Barter$_fun_BagProducts PROCREF:<{
-    OVER
-  }>
-  $Bags$_constructor_bags PROCINLINE:<{
-  }>
-  $Barter$_fun_currentBag PROCREF:<{
-    OVER
-    267 PUSHINT
-    s2 PUSH
-    __tact_dict_get_slice_cell INLINECALLDICT
-    $Bags$_load_opt INLINECALLDICT
-    ISNULL
-    IFJMP:<{
-      DROP
-      B{b5ee9c724101010100020000004cacb9cd} B>boc <s PUSHSLICE
-      $Bags$_constructor_bags INLINECALLDICT
-    }>
-    267 PUSHINT
-    s2 PUSH
-    s0 s2 XCHG
-    __tact_dict_get_slice_cell INLINECALLDICT
-    $Bags$_load_opt INLINECALLDICT
-    $Bags$_not_null INLINECALLDICT
   }>
   $SendParameters$_constructor_bounce_to_value_mode_body_code_data PROCINLINE:<{
   }>
@@ -844,97 +640,50 @@ PROGRAM{
     PUSHNULL
     $Barter$_fun_forward INLINECALLDICT
   }>
+  $Master$_constructor_name_camp_phone_totalBottle_status PROCINLINE:<{
+  }>
   $SendBottle$_constructor_name_masterAddress_senderAddress_total PROCINLINE:<{
     s2 s3 XCHG
-  }>
-  $BagItem$_constructor_id_level_name_image_url_max_price PROCINLINE:<{
   }>
   $DeployOk$_constructor_queryId PROCINLINE:<{
   }>
   $Barter$_internal_binary_ArgAddMaster PROCINLINE:<{
-    DROP
-    s0 s2 XCHG
+    2DROP
     267 PUSHINT
-    s2 s3 XCHG2
+    3 -ROLL
+    0 PUSHINT
     FALSE
-    $Master$_constructor_name_camp_phone_status INLINECALLDICT
+    $Master$_constructor_name_camp_phone_totalBottle_status INLINECALLDICT
     $Master$_store_cell INLINECALLDICT
-    s3 s8 XCHG
+    s3 s5 XCHG
     s1 s2 XCHG
     __tact_dict_set_slice_cell INLINECALLDICT
-    s0 s5 XCHG
+    s0 s2 XCHG
+  }>
+  $Barter$_internal_binary_ArgClearSendBottle PROCINLINE:<{
+    267 PUSHINT
+    PUSHNULL
+    $SendBottle$_store_opt INLINECALLDICT
+    s3 s4 XCHG
+    s1 s2 XCHG
+    __tact_dict_set_slice_cell INLINECALLDICT
+    SWAP
   }>
   $Barter$_internal_binary_ArgSendBottle PROCINLINE:<{
     267 PUSHINT
     s4 s3 s(-1) PUXC2
     $SendBottle$_constructor_name_masterAddress_senderAddress_total INLINECALLDICT
     $SendBottle$_store_cell INLINECALLDICT
-    s3 s6 XCHG
-    s1 s2 XCHG
-    __tact_dict_set_slice_cell INLINECALLDICT
-    s0 s3 XCHG
-  }>
-  $Barter$_internal_binary_ArgVerifyBottle PROCINLINE:<{
-    0 PUSHINT
-    s6 PUSH
-    267 PUSHINT
-    s5 PUSH
-    8 PUSHPOW2
-    __tact_dict_get_slice_uint INLINECALLDICT
-    ISNULL
-    NOT
-    IF:<{
-      DROP
-      s5 PUSH
-      267 PUSHINT
-      s4 PUSH
-      8 PUSHPOW2
-      __tact_dict_get_slice_uint INLINECALLDICT
-      __tact_not_null INLINECALLDICT
-    }>
-    267 PUSHINT
-    s1 s2 PUSH2
-    ADD
-    s3 s8 XCHG
-    s1 s5 s0 XCHG3
-    8 PUSHPOW2
-    __tact_dict_set_slice_uint INLINECALLDICT
-    267 PUSHINT
-    PUSHNULL
-    $SendBottle$_store_opt INLINECALLDICT
-    s3 PUSH
-    s3 s9 XCHG
-    SWAP
-    __tact_dict_set_slice_cell INLINECALLDICT
-    s0 s2 XCHG
-    267 PUSHINT
-    s0 s6 XCHG
-    ADD
-    s3 s7 XCHG
-    s2 s5 XCHG
-    257 PUSHINT
-    __tact_dict_set_slice_int INLINECALLDICT
-    s3 s1 s4 XCHG3
-  }>
-  $Barter$_internal_binary_ArgBagItem PROCINLINE:<{
-    s5 PUSH
-    4 2 BLKSWAP
-    257 PUSHINT
-    s0 s6 XCHG
-    $BagItem$_constructor_id_level_name_image_url_max_price INLINECALLDICT
-    $BagItem$_store_cell INLINECALLDICT
     s3 s4 XCHG
     s1 s2 XCHG
-    __tact_dict_set_int_cell INLINECALLDICT
+    __tact_dict_set_slice_cell INLINECALLDICT
     SWAP
   }>
-  $Barter$_internal_binary_ArgAddUserBag PROCINLINE:<{
+  $Barter$_internal_binary_ArgVerifyBottle PROCINLINE:<{
     267 PUSHINT
-    SWAP
-    $Bags$_constructor_bags INLINECALLDICT
-    $Bags$_store_cell INLINECALLDICT
-    s1 s2 XCHG
-    __tact_dict_set_slice_cell INLINECALLDICT
+    -ROT
+    8 PUSHPOW2
+    __tact_dict_set_slice_uint INLINECALLDICT
   }>
   $Barter$_internal_binary_Deploy PROCINLINE:<{
     $DeployOk$_constructor_queryId INLINECALLDICT
@@ -944,14 +693,14 @@ PROGRAM{
   %isMaster PROC:<{
     __tact_verify_address INLINECALLDICT
     $Barter$_contract_load INLINECALLDICT
-    6 ROLL
+    3 ROLL
     $Barter$_fun_isMaster INLINECALLDICT
-    6 1 BLKDROP2
+    3 1 BLKDROP2
   }>
   %Master PROC:<{
     $Barter$_contract_load INLINECALLDICT
     $Barter$_fun_Master INLINECALLDICT
-    6 1 BLKDROP2
+    3 1 BLKDROP2
   }>
   %StatusMaster PROC:<{
     SWAP
@@ -959,34 +708,21 @@ PROGRAM{
     SWAP
     __tact_verify_address INLINECALLDICT
     $Barter$_contract_load INLINECALLDICT
-    2 6 BLKSWAP
+    2 3 BLKSWAP
     $Barter$_fun_StatusMaster INLINECALLDICT
-    6 1 BLKDROP2
+    3 1 BLKDROP2
   }>
   %SendBottles PROC:<{
     $Barter$_contract_load INLINECALLDICT
     $Barter$_fun_SendBottles INLINECALLDICT
-    6 1 BLKDROP2
+    3 1 BLKDROP2
   }>
   %TotalBottle PROC:<{
     __tact_verify_address INLINECALLDICT
     $Barter$_contract_load INLINECALLDICT
-    6 ROLL
+    3 ROLL
     $Barter$_fun_TotalBottle INLINECALLDICT
-    6 1 BLKDROP2
-  }>
-  %BagProducts PROC:<{
-    $Barter$_contract_load INLINECALLDICT
-    $Barter$_fun_BagProducts INLINECALLDICT
-    6 1 BLKDROP2
-  }>
-  %currentBag PROC:<{
-    __tact_verify_address INLINECALLDICT
-    $Barter$_contract_load INLINECALLDICT
-    6 ROLL
-    $Barter$_fun_currentBag INLINECALLDICT
-    6 1 BLKDROP2
-    $Bags$_to_external INLINECALLDICT
+    3 1 BLKDROP2
   }>
   supported_interfaces PROC:<{
     123515602279859691144772641439386770278 PUSHINT
@@ -995,7 +731,7 @@ PROGRAM{
     209474421377847335869795010607481022628 PUSHINT
   }>
   get_abi_ipfs PROC:<{
-    x{697066733a2f2f516d637361783561586369616f4856696d6b677034443371726576334a69684a51596832766d6e33473971584d56} PUSHSLICE
+    x{697066733a2f2f516d58617a7251704b614263775955636b594b71595672543465486771676b6468534d647a7a387661626a795773} PUSHSLICE
   }>
   lazy_deployment_completed PROC:<{
     c4 PUSH
@@ -1019,13 +755,23 @@ PROGRAM{
       32 PLDU
     }>
     DUP
-    7850487 PUSHINT
+    226298563 PUSHINT
     EQUAL
     IFJMP:<{
       DROP
       $ArgAddMaster$_load INLINECALLDICT
-      1 5 BLKDROP2
+      1 6 BLKDROP2
       $Barter$_internal_binary_ArgAddMaster INLINECALLDICT
+      TRUE
+    }>
+    DUP
+    1064188078 PUSHINT
+    EQUAL
+    IFJMP:<{
+      DROP
+      $ArgClearSendBottle$_load INLINECALLDICT
+      NIP
+      $Barter$_internal_binary_ArgClearSendBottle INLINECALLDICT
       TRUE
     }>
     DUP
@@ -1039,33 +785,13 @@ PROGRAM{
       TRUE
     }>
     DUP
-    2964497605 PUSHINT
+    1650289486 PUSHINT
     EQUAL
     IFJMP:<{
       DROP
       $ArgVerifyBottle$_load INLINECALLDICT
-      1 3 BLKDROP2
-      $Barter$_internal_binary_ArgVerifyBottle INLINECALLDICT
-      TRUE
-    }>
-    DUP
-    1606671232 PUSHINT
-    EQUAL
-    IFJMP:<{
-      DROP
-      $ArgBagItem$_load INLINECALLDICT
-      1 6 BLKDROP2
-      $Barter$_internal_binary_ArgBagItem INLINECALLDICT
-      TRUE
-    }>
-    DUP
-    891968436 PUSHINT
-    EQUAL
-    IFJMP:<{
-      DROP
-      $ArgAddUserBag$_load INLINECALLDICT
       1 2 BLKDROP2
-      $Barter$_internal_binary_ArgAddUserBag INLINECALLDICT
+      $Barter$_internal_binary_ArgVerifyBottle INLINECALLDICT
       TRUE
     }>
     2490013878 PUSHINT
@@ -1098,7 +824,7 @@ PROGRAM{
     s0 s2 XCHG
     __tact_context_sender SETGLOB
     $Barter$_contract_load INLINECALLDICT
-    2 6 BLKSWAP
+    2 3 BLKSWAP
     $Barter$_contract_router_internal INLINECALLDICT
     130 THROWIFNOT
     $Barter$_contract_store INLINECALLDICT
