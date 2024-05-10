@@ -54,8 +54,8 @@ const Roadmap = () => {
                         data-aos="fade-left"
                         data-aos-duration="1000"
                     >
-                        <h3 className="text-lg font-semibold lg:text-xl">Memilih model NFT</h3>
-                        <p className="mt-2 leading-6">Di saat proses ini user akan memilih model NFT. NFT yang di pilih akan mempengaruhi batas pengumpulan botol sekali pakai dalam seminggu
+                        <h3 className="text-lg font-semibold lg:text-xl">Memilih model BAG</h3>
+                        <p className="mt-2 leading-6">Di saat proses ini user akan memilih model BAG. BAG yang di pilih akan mempengaruhi batas pengumpulan botol sekali pakai dalam seminggu
                             dan juga mempengaruhi nilai tukar utility BTL terhadap Currency KLO (Toncoin).</p>
                         <span className="absolute text-sm text-text font-bold -top-5 left-2 whitespace-nowrap">
                             Tahap Kedua

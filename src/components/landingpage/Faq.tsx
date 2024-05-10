@@ -13,8 +13,8 @@ const faqData = [
     },
     {
         id:3,
-        question: 'Apakah dengan mengupgrade NFT maka akan menaikan nilai tukar Utilitas BTL saya ?',
-        answer: 'Benar sekali, dengan anda membeli NFT secara tidak langsung anda akan langsung berkontribusi terhadap penanaman pohon yang ada di hutan konservasi dari Klora dan pastinya juga akan meningkatkan nilai tukar ' +
+        question: 'Apakah dengan mengupgrade BAG maka akan menaikan nilai tukar Utilitas BTL saya ?',
+        answer: 'Benar sekali, dengan anda membeli BAG secara tidak langsung anda akan langsung berkontribusi terhadap penanaman pohon yang ada di hutan konservasi dari Klora dan pastinya juga akan meningkatkan nilai tukar ' +
             'Utilitas BTL terhadap Toncoin (KLO)  !'
     }
 
