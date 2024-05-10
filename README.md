@@ -34,3 +34,4 @@ Dengan solusi tersebut, klora berkomitmen untuk megurangi emisi plastik dan mend
 Klora senantiasa mengajak seluruh elemen masyarakat untuk turut serta dalam menjaga iklim bumi.
 
 #### Bersama klora dari langkah kecil lahir dampak besar.
+link Youtube : https://youtu.be/p3vI2t_j6Fs
