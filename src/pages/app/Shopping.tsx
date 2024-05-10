@@ -9,14 +9,6 @@ import { Address, toNano } from "@ton/core";
 import { BagItem, Barter } from "../../contracts/Barter";
 import { useTonConnect } from "../../hooks/useTonConnect";
 
-type InfoProductType = {
-  id: bigint;
-  level: bigint;
-  image_url: string;
-  name: string;
-  price: string;
-};
-
 function sleep(ms: number): Promise<void> {
   return new Promise((resolve) => setTimeout(resolve, ms));
 }
@@ -110,8 +102,6 @@ function Shopping() {
         await barterMaster.getBagProducts()
       ).values();
       setInfoProduct(infoProduct);
-      console.log(infoProduct);
-
       // TODO ADD NEW FUNCTION
       const myBags = (
         await barterMaster.getCurrentBag(Address.parse(friendlyAddress))
@@ -132,7 +122,7 @@ function Shopping() {
       }
     };
     get();
-  }, [addToItem, barterContract, client, friendlyAddress, newBag, sender]);
+  }, [addToItem, barterContract, client, friendlyAddress]);
   return (
     <>
       <div>

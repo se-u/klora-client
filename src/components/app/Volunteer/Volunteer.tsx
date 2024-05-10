@@ -121,25 +121,26 @@ export default function Volunteer() {
       setMyBottle(Number(myBottle));
 
       const bottlePool = await barterMaster.getSendBottles();
+      if (bottlePool.values().length == 0) return;
       setBottlePool(bottlePool.values());
       setDST(bottlePool.values()[0].senderAddress);
 
-      if (verify && DST && !isVerified) {
-        await barterMaster.send(
-          sender,
-          { value: toNano("0.01") },
-          {
-            $$type: "ArgVerifyBottle",
-            address: DST,
-            amount: BigInt(0),
-          }
-        );
-        // TODO CLEAR WITH GET
-        setIsVerified(true);
-        await sleep(5000);
-        console.warn("TODO CLEAR WITH GET");
-        setTransfer(true);
-      }
+      //   if (verify && DST && !isVerified) {
+      //     await barterMaster.send(
+      //       sender,
+      //       { value: toNano("0.01") },
+      //       {
+      //         $$type: "ArgVerifyBottle",
+      //         address: DST,
+      //         amount: BigInt(0),
+      //       }
+      //     );
+      //     // TODO CLEAR WITH GET
+      //     setIsVerified(true);
+      //     await sleep(5000);
+      //     console.warn("TODO CLEAR WITH GET");
+      //     setTransfer(true);
+      //   }
     };
     getBarter();
   }, [client, friendlyAddress, isVerified, transfer, verify]);
