@@ -109,7 +109,7 @@ function NearModHome() {
               <li key={id}>
                 <Link
                   to="#"
-                  className="flex gap-2 items-center h-full rounded-lg border-t-2 border-l-2 border-r-[5px] border-b-[4px] border-border p-2 hover:bg-primary-100"
+                  className="flex gap-2 items-center h-full rounded-lg border-t-2 border-l-2 border-r-[5px] border-b-[3px] border-border p-2 hover:bg-primary-100"
                   onClick={() => handleModClick(mod)}
                 >
                   <LocationTick

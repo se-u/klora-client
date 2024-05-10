@@ -95,7 +95,7 @@ function Shopping() {
           <header className="grid gap-2">
             <h2 className="text-3xl font-bold text-neutral-900">Bag Shop</h2>
             <p className=" text-neutral-500">
-              Bag shop merupakan toko bag digital berbasis NFT.
+              Bag shop merupakan toko bag digital.
             </p>
           </header>
           {/* END Header, kata pembuka */}
@@ -107,13 +107,13 @@ function Shopping() {
               placeholder="Search products..."
               value={searchQuery}
               onChange={handleSearchChange}
-              className="bg-white border border-neutral-200 rounded px-3 py-1 text-xs"
+              className="bg-white border border-neutral-200 rounded-lg px-3 py-1 text-xs"
             />
             {/* Sorting Dropdown */}
             <select
               value={sortBy}
               onChange={handleChange}
-              className="bg-white border border-neutral-200 rounded px-3 py-1 text-xs text-neutral-600"
+              className="bg-white border border-neutral-200 rounded-lg px-3 py-1 text-xs text-neutral-600"
             >
               <option value="default">Default</option>
               <option value="levelLowToHigh">Low to High</option>
@@ -122,12 +122,12 @@ function Shopping() {
           </div>
 
           {/* List Produk */}
-          <ul className="grid gap-4 sm:grid-cols-2">
+          <ul className="grid gap-4 sm:grid-cols-2 ">
             {sortProducts().map((produknya) => (
-              <li key={produknya.id}>
+              <li key={produknya.id} className="border hover:bg-primary-100 rounded-lg p-1 border-t-2 border-l-2 border-r-[5px] border-b-[3px] border-border">
                 <Link
                   to="#"
-                  className="group block overflow-hidden"
+                  className="group block  overflow-hidden"
                   onClick={() => handleShowDetails(produknya)}
                 >
                   <img
@@ -136,17 +136,17 @@ function Shopping() {
                     className="size-44 object-cover"
                   />
 
-                  <div className="relative bg-white pt-3">
-                    <p>Level {produknya.level}</p>
-                    <h3 className="text-xs text-neutral-700 group-hover:underline group-hover:underline-offset-4">
+                  <div className="relative  pl-2">
+                    <p className="font-bold">Level {produknya.level}</p>
+                    <h3 className="text-xs font-semibold text-neutral-700">
                       {produknya.productName}
                     </h3>
 
                     <p className="mt-2">
                       <span className="sr-only"> Regular Price </span>
 
-                      <span className="tracking-wider text-neutral-900">
-                        {produknya.hargaToken}
+                      <span className="tracking-wider font-bold text-neutral-900">
+                        {produknya.hargaToken} KLO
                       </span>
                     </p>
                   </div>
