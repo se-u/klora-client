@@ -51,22 +51,22 @@ function BottomNav() {
                                 </p>
                             </Link>
                         </li>
-                        <li
-                            className={`grid w-full ${
-                                activePage === "/app/volunteer"
-                                    ? "text-primary-700"
-                                    : "text-neutral-500"
-                            } hover:text-primary-600`}
-                            onClick={() => handleSetActivePage("/app/volunteer")}
-                        >
-                            <Link to="/app/volunteer" className="grid gap-1">
-                                <UserTick
-                                    className="w-6 h-6 mx-auto "
-                                    variant="Bulk"
-                                />
-                                <p className="text-center text-xs">Admin</p>
-                            </Link>
-                        </li>
+                        {/*<li*/}
+                        {/*    className={`grid w-full ${*/}
+                        {/*        activePage === "/app/volunteer"*/}
+                        {/*            ? "text-primary-700"*/}
+                        {/*            : "text-neutral-500"*/}
+                        {/*    } hover:text-primary-600`}*/}
+                        {/*    onClick={() => handleSetActivePage("/app/volunteer")}*/}
+                        {/*>*/}
+                        {/*    <Link to="/app/volunteer" className="grid gap-1">*/}
+                        {/*        <UserTick*/}
+                        {/*            className="w-6 h-6 mx-auto "*/}
+                        {/*            variant="Bulk"*/}
+                        {/*        />*/}
+                        {/*        <p className="text-center text-xs">Admin</p>*/}
+                        {/*    </Link>*/}
+                        {/*</li>*/}
                         <li
                             className={`grid w-full ${
                                 activePage === "/app/shop"
