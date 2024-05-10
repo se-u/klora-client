@@ -33,7 +33,7 @@ function Problem() {
                         </h1>
                         <h1 className="text-[2rem] tracking-tight text-center md:text-[3rem] font-bold leading-[110%] mt-5">
                             Indonesia menghasilkan lebih dari <br/> <span
-                            className="bg-primary-200 px-3">2.4 Miliar</span>
+                            className="bg-primary-200 px-3">21,1 Juta Ton</span>
                             sampah botol plastik setiap tahunnya
                         </h1>
                         <p className="text-center text-xl mt-10">

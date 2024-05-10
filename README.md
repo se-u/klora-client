@@ -1,30 +1,36 @@
-# React + TypeScript + Vite
+# Klora
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
 
-Currently, two official plugins are available:
+## Authors
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react/README.md) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+- Sindu Aditya Janadi
+- Azriel Sebastian Pamungkas
+- Sen Arya Chrisamuel
 
-## Expanding the ESLint configuration
+## Brief Explanation
+### Introduction
+Klora hadir untuk mengubah pandangan masyarakat terhadap botol air minum sekali pakai, menjadikannya lebih bernilai dan berkontribusi secara signifikan dalam menjaga kelestarian lingkungan.
 
-If you are developing a production application, we recommend updating the configuration to enable type aware lint rules:
+### Problem statement
+peningkatan penggunaan plastik di indonesia yang masif hingga saat ini masih belum diimbangi dengan manajemen sampah yang baik. hal ini menimbulkan
+dampak buruk bagi lingkungan seperti:
+Mengancam kehidupan laut
+Memperburuk kualitas udara
+dan resiko perubahan iklim
 
-- Configure the top-level `parserOptions` property like this:
+### Solutions
+Klora menjadi solusi awal bagi masyarakat untuk memulai aksi menjaga iklim melalui botol sekali pakai dengan mudah, tepat, dan efektif.
+hal tersebut dapat di capai dengan Fitur utama Klora:
+- Plastic Bottle Emission Calculator : Kalkulator Klora akan menghitung dampak lingkungan dari penggunaan botol plastik. Dengan input jumlah dan jenis botol yang anda gunakan, Anda akan mendapatkan perkiraan emisi plastik yang anda hasilkan.
+- Bottle to Utility to Crypto (KLO) : Setiap melakukan pengumpulan botol bekas ke Volunteer, anda akan mendapatkan token Utility yang nantinya dapat di tukar menjadi Currency Klora (token KLO). Token tersebut dapat anda gunakan di market Currency.
 
-```js
-export default {
-  // other rules...
-  parserOptions: {
-    ecmaVersion: 'latest',
-    sourceType: 'module',
-    project: ['./tsconfig.json', './tsconfig.node.json'],
-    tsconfigRootDir: __dirname,
-  },
-}
-```
+### Whats next ?
+Botol-botol yang telah diserahkan akan disortir dan diproses menjadi biji plastik yang dapat digunakan kembali.
 
-- Replace `plugin:@typescript-eslint/recommended` to `plugin:@typescript-eslint/recommended-type-checked` or `plugin:@typescript-eslint/strict-type-checked`
-- Optionally add `plugin:@typescript-eslint/stylistic-type-checked`
-- Install [eslint-plugin-react](https://github.com/jsx-eslint/eslint-plugin-react) and add `plugin:react/recommended` & `plugin:react/jsx-runtime` to the `extends` list
+Melalui program daur ulang, Klora berkomitmen untuk mengurangi limbah plastik dan mendorong ekonomi yang berkelanjutan.
+
+Dengan solusi tersebut, klora berkomitmen untuk megurangi emisi plastik dan mendukung ekonomi yang berkelanjutan.
+
+Klora senantiasa mengajak seluruh elemen masyarakat untuk turut serta dalam menjaga iklim bumi.
+
+#### Bersama klora dari langkah kecil lahir dampak besar.

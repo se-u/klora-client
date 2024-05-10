@@ -2,7 +2,7 @@ import { useEffect } from "react";
 
 import AOS from "aos";
 import "aos/dist/aos.css";
-import { Link } from "react-router-dom";
+import { Link as ScrollLink } from "react-scroll";
 
 function Hero() {
   useEffect(() => {
@@ -18,19 +18,23 @@ function Hero() {
         <article className="grid gap-2 order-2 lg:order-1  text-center lg:text-left mx-auto ">
           <h1 className="text-2xl md:text-4xl lg:text-7xl  font-bold text-neutral-900 leading-[110%] tracking-tigh">
             Tukar <i>botol</i> sekali pakai <br /> menjadi{" "}
-            <span className="bg-primary-200 italic">Token Utility. </span>
+            <span className="bg-primary-200 italic">Token Kripto. </span>
           </h1>
           <p className="font-outfit font-normal text-neutral-600 text-md md:text-2xl leading-[110%]">
             Mulai langkah awalmu dalam mengurangi emisi karbon dan menjaga Iklim{" "}
             <span className=""> bersama klora</span>
           </p>
           <div className="mt-5">
-            <Link
-              to="/login"
-              className="w-fit py-3 px-5 text-white font-semibold bg-primary-700 hover:bg-primary-800 rounded-full"
+            <ScrollLink
+                spy={true}
+                smooth={true}
+                offset={-70}
+                duration={700}
+                to="howItWorks"
+                className="w-fit py-3 px-5 text-white font-semibold bg-primary-700 hover:bg-primary-800 rounded-full"
             >
               Coba sekarang
-            </Link>
+            </ScrollLink>
           </div>
         </article>
         <img

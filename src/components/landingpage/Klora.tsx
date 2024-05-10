@@ -18,7 +18,7 @@ function Klora() {
                     <div className="flex flex-col">
                         <div className="mt-10 mb-10">
                             <h1 className="font-bold text-primary-700 text-5xl">
-                                Klora
+                                Our Mission
                             </h1>
                             <p className="text-xl mt-10">
                                 Klora bertekad untuk menciptakan perubahan yang
@@ -59,7 +59,7 @@ function Klora() {
                                             clipRule="evenodd"
                                         />
                                     </svg>
-                                    Swap Utility to Crypto Currency
+                                    Swap Utility to Crypto Coin (KLO)
                                 </li>
                                 <li className="flex items-center space-x-2">
                                     <svg
