@@ -54,11 +54,11 @@ export default function App() {
           path: "/app/profile",
           element: <MyProfile />,
         },
-        {
-          path: "*",
-          element: <FourOhFourOhFour />,
-        },
       ],
+    },
+    {
+      path: "*",
+      element: <FourOhFourOhFour />,
     },
   ]);
 

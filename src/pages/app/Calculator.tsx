@@ -83,24 +83,28 @@ const Calculator = () => {
             ))}
             <AppButton onClick={handleCalculate} text="Hitung Sekarang" />
             {carbonEmissions > 0 && (
-                <div className="mt-4 grid grid-cols-2 gap-4">
-                    <div className="p-4 bg-gray-100 rounded-md">
-                        <h2 className="font-semibold">
-                            Karbon yang Dihasilkan
-                        </h2>
-                        <p className="text-lg">{carbonEmissions} kgCO2</p>
+                <div className="">
+                    <div className="mt-4 grid grid-cols-2 gap-4">
+                        <div className="p-4 bg-gray-100 rounded-md">
+                            <h2 className="font-semibold">Total Botol</h2>
+                            <p className="text-lg">{totalBottles} Botol</p>
+                        </div>
+                        <div className="p-4 bg-gray-100 rounded-md">
+                            <h2 className="font-semibold">
+                                Karbon yang Dihasilkan
+                            </h2>
+                            <p className="text-lg">{carbonEmissions} kgCO2</p>
+                        </div>
                     </div>
-                    <div className="p-4 bg-gray-100 rounded-md">
-                        <h2 className="font-semibold">Total Botol</h2>
-                        <p className="text-lg">{totalBottles} Botol</p>
-                    </div>
-                    <div className="p-4 bg-gray-100 rounded-md">
-                        <h2 className="font-semibold">Total Utility</h2>
-                        <p className="text-lg">{totalUtility} BTL</p>
-                    </div>
-                    <div className="p-4 bg-gray-100 rounded-md">
-                        <h2 className="font-semibold">Total Koin KLO</h2>
-                        <p className="text-lg">{totalCurrency} KLO</p>
+                    <div className="grid col-span-1 gap-4 mt-4">
+                        <div className="p-4 bg-gray-100 rounded-md flex justify-between">
+                            <h2 className="font-semibold">Total Utility</h2>
+                            <p className="text-lg">{totalUtility} BTL</p>
+                        </div>
+                        <div className="p-4 bg-gray-100 rounded-md flex justify-between">
+                            <h2 className="font-semibold">Total KLO</h2>
+                            <p className="text-lg">{totalCurrency} KLO</p>
+                        </div>
                     </div>
                 </div>
             )}

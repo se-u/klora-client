@@ -109,7 +109,7 @@ function NearModHome() {
               <li key={id}>
                 <Link
                   to="#"
-                  className="flex gap-2 items-center h-full rounded-lg border border-neutral-200 p-2 hover:bg-neutral-100"
+                  className="flex gap-2 items-center h-full rounded-lg border-t-2 border-l-2 border-r-[5px] border-b-[4px] border-border p-2 hover:bg-primary-100"
                   onClick={() => handleModClick(mod)}
                 >
                   <LocationTick
@@ -128,13 +128,13 @@ function NearModHome() {
                 </Link>
                 {/* DETAIL MOD */}
                 {selectedMod && selectedMod.name === mod.name && (
-                  <div className="mt-4 p-4 border border-neutral-200 space-y-2 rounded-lg">
+                  <div className="mt-4 p-4 border-t-2 border-l-2 border-r-[6px] border-b-[4px] border-border space-y-2 rounded-xl">
                     <div className="flex items-center justify-between mb-4">
                       <h3 className="text-lg font-semibold">{mod.name}</h3>
                       <CloseCircle
                         onClick={handleCloseDetail}
                         variant="Bulk"
-                        className="text-primary-600"
+                        className="text-primary-500"
                       />
                     </div>
                     <img

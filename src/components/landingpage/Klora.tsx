@@ -74,7 +74,7 @@ function Klora() {
                                             clipRule="evenodd"
                                         />
                                     </svg>
-                                    NFT Bag
+                                    Bag
                                 </li>
                             </ul>
                         </div>
