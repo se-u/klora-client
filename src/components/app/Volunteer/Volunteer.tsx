@@ -1,76 +1,148 @@
 import { useEffect, useState } from "react";
-import { useBarterContracts } from "../../../hooks/useBarterContract";
-import { Address } from "@ton/core";
-import { useTonAddress } from "@tonconnect/ui-react";
-import { SendBottle } from "../../../contracts/Barter";
-import { TokenData } from "../../../hooks/TokenData";
-import { JettonWallet } from "@ton/ton";
+import { Address, beginCell, toNano } from "@ton/core";
+import { useTonAddress, useTonConnectUI } from "@tonconnect/ui-react";
+import { Barter, SendBottle } from "../../../contracts/Barter";
+import { JettonMaster, JettonWallet } from "@ton/ton";
 import { useTonClient } from "../../../hooks/useTonClient";
+import config from "../../../../config";
+import { useTonConnect } from "../../../hooks/useTonConnect";
 
-type SendBottleWithId = {
-  id: number;
-  $$type: "SendBottle";
-  masterAddress: Address;
-  name: string;
-  senderAddress: Address;
-  total: bigint;
-};
+// type SendBottleWithId = {
+//   id: number;
+//   $$type: "SendBottle";
+//   masterAddress: Address;
+//   name: string;
+//   senderAddress: Address;
+//   total: bigint;
+// };
 
-export function sleep(ms: number): Promise<void> {
+function sleep(ms: number): Promise<void> {
   return new Promise((resolve) => setTimeout(resolve, ms));
 }
 
 export default function Volunteer() {
+  const [tonConnectUI] = useTonConnectUI();
+
+  const [verify, setVerify] = useState<boolean>(false);
+  const [isVerified, setIsVerified] = useState<boolean | null>(false);
+
+  // State
+  const [myBottle, setMyBottle] = useState<number>();
+  const [bottlePool, setBottlePool] = useState<SendBottle[]>();
+
+  // Logic #
+  const { sender } = useTonConnect();
   const friendlyAddress = useTonAddress();
   const client = useTonClient();
-  const { isMaster, master, sendBottles, clearSendAndUpdateUser } =
-    useBarterContracts();
-  const [myBottle, setMyBottle] = useState<number>();
-  const [sendBottlesData, setSendBottlesData] = useState<SendBottleWithId[]>();
-  const tokenData = TokenData();
+  const { utilityContract, barterContract } = config;
 
-  const [isVerified, setIsVerified] = useState<boolean | null>(false);
-  const [verifiedNotification, setVerifiedNotification] = useState("");
-
-  const handleVerify = async () => {
-    if (tokenData.walletAddress) {
-      const wallet = client?.open(
-        JettonWallet.create(tokenData?.walletAddress)
-      );
-      const beforebalance = await wallet?.getBalance();
-      await tokenData.transfer();
-
-      let afterBalance = await wallet?.getBalance();
-      let i = 0;
-
-      while (beforebalance == afterBalance) {
-        console.log("attemp", ++i);
-        console.log("before", beforebalance);
-        setIsVerified(true);
-        setVerifiedNotification("Loading ..");
-        afterBalance = await wallet?.getBalance();
-        console.log("after", afterBalance);
-        await sleep(4000);
-      }
-
-      setVerifiedNotification("Reward berhasil ditransfer.");
-      // Update data pengguna jika perlu
-    }
-  };
+  const [balance, setBalance] = useState<null | number>(null);
+  const [tonBalance, setTonBalance] = useState<null | number>(null);
+  console.log(balance, tonBalance);
+  const [transfer, setTransfer] = useState<boolean>(false);
+  const [DST, setDST] = useState<Address>();
 
   useEffect(() => {
-    const totalBottle = master?.get(
-      Address.parse(friendlyAddress)
-    )?.totalBottle;
-    if (isMaster) console.log("akses dijinkan");
-    const addIds = (array: SendBottle[]) =>
-      array.map((item, index) => ({ ...item, id: index + 1 }));
-    if (sendBottles) {
-      const sendBottlesData = addIds(sendBottles);
-      setSendBottlesData(sendBottlesData);
-    }
-    setMyBottle(Number(totalBottle));
-  }, [friendlyAddress, isMaster, master, sendBottles]);
+    const get = async () => {
+      if (!client) return;
+      const jettonMaster = client.open(
+        JettonMaster.create(Address.parse(utilityContract.toString()))
+      );
+
+      if (!friendlyAddress) return;
+      const tonBalance = await client.getBalance(
+        Address.parse(friendlyAddress.toString())
+      );
+      setTonBalance(Number(tonBalance) / 1000000000);
+      const jettonAddress = await jettonMaster.getWalletAddress(
+        Address.parse(friendlyAddress.toString())
+      );
+
+      const jettonWallet = client.open(JettonWallet.create(jettonAddress));
+
+      if (transfer && DST) {
+        // ## TRANSFER STATE
+        // transfer#0f8a7ea5 query_id:uint64 amount:(VarUInteger 16) destination:MsgAddress
+        // response_destination:MsgAddress custom_payload:(Maybe ^Cell)
+        // forward_ton_amount:(VarUInteger 16) forward_payload:(Either Cell ^Cell)
+        // = InternalMsgBody;
+        const walletDST = await jettonMaster.getWalletAddress(DST);
+        console.log("walletDST", walletDST);
+        const forwardPayload = beginCell()
+          .storeUint(0, 32) // 0 opcode means we have a comment
+          .storeStringTail("Get Reward")
+          .endCell();
+
+        const body = beginCell()
+          .storeUint(0x0f8a7ea5, 32) // opcode for jetton transfer
+          .storeUint(0, 64) // query id
+          .storeCoins(5) // jetton amount, amount * 10^9
+          .storeAddress(walletDST) // TON wallet destination address
+          .storeAddress(walletDST) // response excess destination
+          .storeBit(0) // no custom payload
+          .storeCoins(toNano("0.02")) // forward amount (if >0, will send notification message)
+          .storeBit(1) // we store forwardPayload as a reference
+          .storeRef(forwardPayload)
+          .endCell();
+
+        const transaction = {
+          messages: [
+            {
+              address: jettonWallet.address.toString(), // sender jetton wallet
+              amount: toNano("0.1").toString(), // for commission fees, excess will be returned
+              payload: body.toBoc().toString("base64"), // payload with jetton transfer and comment body
+            },
+          ],
+          validUntil: Math.floor(Date.now() / 1000) + 360,
+        };
+        await sleep(5000);
+        if (confirm("Apakah anda ingin mengirim reward? ") == true) {
+          console.log("disini");
+          const result = await tonConnectUI.sendTransaction(transaction);
+          console.log(result);
+          setTransfer(false);
+        }
+      }
+      const balance = await jettonWallet.getBalance();
+      setBalance(Number(balance));
+    };
+    get();
+
+    const getBarter = async () => {
+      if (!client) return;
+      const barterMaster = client.open(
+        Barter.fromAddress(Address.parse(barterContract.toString()))
+      );
+
+      if (!friendlyAddress) return;
+      const myBottle = await barterMaster.getTotalBottle(
+        Address.parse(friendlyAddress)
+      );
+      setMyBottle(Number(myBottle));
+
+      const bottlePool = await barterMaster.getSendBottles();
+      setBottlePool(bottlePool.values());
+      setDST(bottlePool.values()[0].senderAddress);
+
+      if (verify && DST && !isVerified) {
+        await barterMaster.send(
+          sender,
+          { value: toNano("0.01") },
+          {
+            $$type: "ArgVerifyBottle",
+            address: DST,
+            amount: BigInt(0),
+          }
+        );
+        // TODO CLEAR WITH GET
+        setIsVerified(true);
+        await sleep(5000);
+        console.warn("TODO CLEAR WITH GET");
+        setTransfer(true);
+      }
+    };
+    getBarter();
+  }, [client, friendlyAddress, isVerified, transfer, verify]);
 
   return (
     <div className="container mx-auto">
@@ -86,16 +158,16 @@ export default function Volunteer() {
       <h1 className="text-xl font-semibold mb-4">List all users</h1>
 
       {/* Detail Pengguna */}
-      {sendBottlesData && (
+      {bottlePool && (
         <div className="bg-white p-4 rounded-md shadow-md mt-4">
           <div className="flex items-center mb-2">
             <span className="mr-2">Name:</span>
-            <span className="font-semibold">{sendBottlesData[0].name}</span>
+            <span className="font-semibold">{bottlePool[0].name}</span>
           </div>
           <div className="flex items-center mb-2">
             <span className="mr-2">Wallet Address:</span>
             <span className="font-semibold">
-              {sendBottlesData[0].senderAddress.toString()}
+              {bottlePool[0].senderAddress.toString()}
             </span>
           </div>
           <div className="flex items-center mb-2">
@@ -103,7 +175,7 @@ export default function Volunteer() {
             <input
               type="number"
               className="border rounded-md px-2 py-1"
-              value={Number(sendBottlesData[0].total)}
+              defaultValue={Number(bottlePool[0].total)}
             />
           </div>
           <div className="mb-2">
@@ -111,7 +183,7 @@ export default function Volunteer() {
               <div className="flex">
                 <button
                   className="font-medium bg-primary-700 hover:bg-primary-600 text-white px-6 py-1 rounded-md mr-2"
-                  onClick={handleVerify}
+                  onClick={() => setVerify(true)}
                 >
                   Verify
                 </button>
@@ -121,7 +193,7 @@ export default function Volunteer() {
               </div>
             ) : (
               <div className="mt-4 bg-primary-500 text-white p-2 rounded-md">
-                {verifiedNotification}
+                Sedang dikirim
               </div>
             )}
           </div>

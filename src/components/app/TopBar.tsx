@@ -20,12 +20,11 @@ function TopBar() {
         JettonMaster.create(Address.parse(utilityContract.toString()))
       );
 
+      if (!friendlyAddress) return;
       const tonBalance = await client.getBalance(
         Address.parse(friendlyAddress.toString())
       );
       setTonBalance(Number(tonBalance) / 1000000000);
-
-      if (!friendlyAddress) return;
       const jettonAddress = await jettonMaster.getWalletAddress(
         Address.parse(friendlyAddress.toString())
       );
