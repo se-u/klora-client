@@ -9,8 +9,11 @@ import MyProfile from "./pages/app/MyProfile";
 import { FourOhFourOhFour } from "./components/landingpage/index";
 import Volunteer from "./components/app/Volunteer/Volunteer";
 import AppLayout from "./layouts/AppLayout";
+import { useTonConnect } from "./hooks/useTonConnect";
 
 export default function App() {
+  const { connected } = useTonConnect();
+
   const router = createBrowserRouter([
     {
       path: "/",
@@ -18,7 +21,7 @@ export default function App() {
       children: [
         {
           path: "/",
-          element: <LandingPages />,
+          element: <LandingPages connected={connected} />,
         },
         {
           path: "*",
@@ -29,7 +32,7 @@ export default function App() {
 
     {
       path: "/app",
-      element: <AppLayout />,
+      element: <AppLayout connected={connected} />,
       children: [
         {
           path: "/app",

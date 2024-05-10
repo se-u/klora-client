@@ -29,8 +29,7 @@ export async function retry<T>(
 }
 
 export async function tryProcessJetton(
-  orderId: string,
-  MY_WALLET_ADDRESS: string
+  MY_WALLET_ADDRESS: string = "0QB3BLlnZg7HhhuMYpXzqgcpBWB-Bco_ejb9-_DBhJFyzlqI"
 ): Promise<string> {
   const client = new TonClient({
     endpoint: "https://testnet.toncenter.com/api/v2/jsonRPC",
@@ -67,7 +66,6 @@ export async function tryProcessJetton(
         userAddress
       );
       const jettonWallet = client.open(JettonWallet.create(jettonUserAddress));
-      const balance = await jettonWallet.getBalance();
 
       //const jettonData = await jettonWallet;
       const jettonData = await client.runMethod(
@@ -155,11 +153,11 @@ export async function tryProcessJetton(
 
         // jetton master contract address check
         const jettonName = jettonWalletAddressToJettonName(sourceAddress);
-        if (!jettonName) {
-          // unknown or fake jetton transfer
-          console.log("unknown or fake jetton transfer");
-          continue;
-        }
+        // if (!jettonName) {
+        //   // unknown or fake jetton transfer
+        //   console.log("unknown or fake jetton transfer");
+        //   continue;
+        // }
 
         if (
           tx.inMessage === undefined ||
@@ -181,22 +179,23 @@ export async function tryProcessJetton(
 
         console.log("op code check passed", tx.hash().toString("hex"));
 
-        // const queryId = body?.loadUint(64);
+        const queryId = body?.loadUint(64);
         const amount = body?.loadCoins();
-        // const from = body?.loadAddress();
-        // const maybeRef = body?.loadBit();
-        // const payload = maybeRef ? body?.loadRef().beginParse() : body;
-        // const payloadOp = payload?.loadUint(32);
-        // if (!(payloadOp == 0)) {
-        //   console.log("no text comment in transfer_notification");
-        //   continue;
-        // }
+        const from = body?.loadAddress();
+        const maybeRef = body?.loadBit();
+        const payload = maybeRef ? body?.loadRef().beginParse() : body;
+        const payloadOp = payload?.loadUint(32);
+        if (!(payloadOp == 0)) {
+          console.log("no text comment in transfer_notification");
+          continue;
+        }
 
         // const comment = payload?.loadStringTail();
         // if (!(comment == orderId)) {
         //   continue;
         // }
 
+        console.log("aaa");
         console.log(
           "Got " +
             jettonName +
@@ -209,8 +208,8 @@ export async function tryProcessJetton(
         const txHash = tx.hash().toString("hex");
         return txHash;
       }
-      //   throw new Error("Transaction not found");
+      console.warn("Transaction not found");
     },
-    { retries: 1, delay: 4000 }
+    { retries: 100, delay: 15000 }
   );
 }

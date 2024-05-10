@@ -1,23 +1,41 @@
 // import React from "react";
-
-import { useTonAddress } from "@tonconnect/ui-react";
-import { TokenData } from "../../hooks/TokenData";
+// import { TokenData } from "../../hooks/TokenData";
 import { useEffect, useState } from "react";
-import { Address } from "@ton/core";
+import { Address, JettonMaster, JettonWallet } from "@ton/ton";
+import config from "../../../config";
+import { TonConnectButton, useTonAddress } from "@tonconnect/ui-react";
+import { useTonClient } from "../../hooks/useTonClient";
 
 function TopBar() {
   const friendlyAddress = useTonAddress();
-  const { btl, transfer } = TokenData(
-    "0QBNwC2ou0P7AOxsahUPuUZQn71aTIxzXa9BnMWB0MQgAY1Y"
-  );
+  const client = useTonClient();
+  const { utilityContract } = config;
 
   const [balance, setBalance] = useState<null | number>(null);
+  const [tonBalance, setTonBalance] = useState<null | number>(null);
   useEffect(() => {
     const get = async () => {
-      if (btl) setBalance(btl);
+      if (!client) return;
+      const jettonMaster = client.open(
+        JettonMaster.create(Address.parse(utilityContract.toString()))
+      );
+
+      const tonBalance = await client.getBalance(
+        Address.parse(friendlyAddress.toString())
+      );
+      setTonBalance(Number(tonBalance) / 1000000000);
+
+      if (!friendlyAddress) return;
+      const jettonAddress = await jettonMaster.getWalletAddress(
+        Address.parse(friendlyAddress.toString())
+      );
+
+      const jettonWallet = client.open(JettonWallet.create(jettonAddress));
+      const balance = await jettonWallet.getBalance();
+      setBalance(Number(balance));
     };
     get();
-  }, [btl]);
+  }, [client, friendlyAddress, utilityContract]);
   return (
     <>
       <div className="flex justify-between px-3 py-4 border overflow-x-auto">
@@ -36,10 +54,7 @@ function TopBar() {
           {/* UTILITY TOKEN */}
           <div className="flex gap-2  items-center">
             {/* Angka token */}
-            <p
-              onClick={() => transfer()}
-              className="text-sm font-semibold text-neutral-600"
-            >
+            <p className="text-sm font-semibold text-neutral-600">
               {balance == null ? "loading.." : balance} BTL
             </p>
             {/* Angka token END*/}
@@ -50,7 +65,9 @@ function TopBar() {
           {/* TOKEN */}
           <div className="flex gap-2  items-center">
             {/* Angka token */}
-            <p className="text-sm font-semibold text-neutral-600">0.001 KLO</p>
+            <p className="text-sm font-semibold text-neutral-600">
+              {tonBalance} KLO
+            </p>
             {/* Angka token END */}
             <img src="/KLOC.svg" alt="crypto KLO" className="w-7 h-7" />
           </div>

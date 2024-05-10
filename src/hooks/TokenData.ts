@@ -10,9 +10,11 @@ import { useTonConnectUI } from "@tonconnect/ui-react";
 import { useAsyncInitialize } from "./useAsyncInitialize";
 import { useState } from "react";
 
-export function TokenData(MY_WALLET_ADDRESS: string) {
+export function TokenData() {
+  const MY_WALLET_ADDRESS = "0QBNwC2ou0P7AOxsahUPuUZQn71aTIxzXa9BnMWB0MQgAY1Y";
   const [tonConnectUI] = useTonConnectUI();
   const [balance, setBalance] = useState(0);
+  const [walletAddress, setWalletAddress] = useState<Address>();
   const client = new TonClient({
     endpoint: "https://testnet.toncenter.com/api/v2/jsonRPC",
     apiKey: "24cf68e62988d24e0b2135faad64851d79a80d9fb391df2b83f13ab182c634a8",
@@ -31,12 +33,14 @@ export function TokenData(MY_WALLET_ADDRESS: string) {
     const jettonWallet = client.open(JettonWallet.create(jettonUserAddress));
     const balance = await jettonWallet.getBalance();
     setBalance(Number(balance));
+    setWalletAddress(jettonWallet.address);
   }, []);
 
   return {
     btl: balance,
+    walletAddress,
     transfer: async (
-      destinationAddress: string = "EQBbvsnZDVnPkXpT8yd-ZHlPOyz9nZ-HLadQ_4m8p-N21xrl",
+      destinationAddress: string = "0QB3BLlnZg7HhhuMYpXzqgcpBWB-Bco_ejb9-_DBhJFyzlqI",
       sourceAddress: string = "EQBNM5IGnQZCCC-z3xvCKGCaMkvubCNJDq1q-0u7WbSqyJu_"
     ) => {
       // transfer#0f8a7ea5 query_id:uint64 amount:(VarUInteger 16) destination:MsgAddress

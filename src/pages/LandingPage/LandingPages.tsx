@@ -1,4 +1,4 @@
-import { useNavigate } from "react-router-dom";
+import { Navigate } from "react-router-dom";
 import {
   Klora,
   AreYouReady,
@@ -9,16 +9,11 @@ import {
   FAQPage,
   Roadmap,
 } from "../../components/landingpage/index.jsx";
-import { useTonConnect } from "../../hooks/useTonConnect.js";
 
-export default function LandingPages() {
-  const navigate = useNavigate();
-  const { connected } = useTonConnect();
-
+export default function LandingPages({ connected }: { connected: boolean }) {
   if (connected) {
-    return <>{navigate("/app")}</>;
+    return <Navigate to="/app" replace />;
   }
-
   return (
     <>
       <main className="bg-neutral-50  overflow-hidden">
