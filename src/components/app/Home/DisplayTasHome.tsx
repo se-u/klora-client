@@ -47,7 +47,7 @@ function DisplayTasHome() {
     {
       id: 1,
       level: "Level 1",
-      slideImages: "https://swiperjs.com/demos/images/nature-1.jpg",
+      slideImages: "/BAG1.png",
       jmlBotol: Number(myBottle),
       maxBotol: 15,
     },
